@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Book an appointment with MedicalCare's certified doctors online.">
+    <title>Book Appointment — MedicalCare</title>
+    <link rel="shortcut icon" href="assets/favicon.png" type="image/x-icon">
+    <!-- Remix Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <!-- LEFT SIDE (BLUE DESIGN) -->
+        <div class="login-left">
+            <a href="index.html" class="login-back-link">
+                <i class="ri-arrow-left-line"></i> Back to Home
+            </a>
+            <h1 class="logo">
+                <i class="ri-stethoscope-line"></i> MedicalCare
+            </h1>
+
+            <h2>WELCOME</h2>
+            <p class="motto">"Your Health, Our Priority"</p>
+
+            <p class="desc">
+                We provide trusted healthcare services with expert doctors and modern facilities.
+                Book appointments easily and get treated with care.
+            </p>
+
+            <!-- Design Circles -->
+            <div class="circle big"></div>
+            <div class="circle small"></div>
+        </div>
+
+        <!-- RIGHT SIDE (FORM) -->
+        <div class="login-right">
+            <h2 class="form-title">Book Appointment</h2>
+
+            <form class="login-form" id="loginForm" novalidate>
+
+                <div class="input-box">
+                    <i class="ri-user-line"></i>
+                    <input type="text" id="name" placeholder="Full Name" required autocomplete="name">
+                </div>
+
+                <div class="input-box">
+                    <i class="ri-calendar-line"></i>
+                    <input type="number" id="age" placeholder="Age" min="1" max="120" required>
+                </div>
+
+                <div class="input-box">
+                    <i class="ri-user-3-line"></i>
+                    <select id="gender" required>
+                        <option value="">Select Gender</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <i class="ri-phone-line"></i>
+                    <input type="tel" id="phone" placeholder="Mobile Number" required autocomplete="tel">
+                </div>
+
+                <div class="input-box">
+                    <i class="ri-virus-line"></i>
+                    <input type="text" id="disease" placeholder="Disease / Issue" required>
+                </div>
+
+                <div class="input-box">
+                    <i class="ri-hospital-line"></i>
+                    <select id="doctor" required>
+                        <option value="">Choose Doctor</option>
+                        <option value="Dr. Myla Harts - Bones">Dr. Myla Harts — Bones</option>
+                        <option value="Dr. John Smith - Heart">Dr. John Smith — Heart</option>
+                        <option value="Dr. Sarah Lee - Child">Dr. Sarah Lee — Child</option>
+                        <option value="Dr. Michael Brown - Neuro">Dr. Michael Brown — Neuro</option>
+                        <option value="Dr. Emily Davis - Skin">Dr. Emily Davis — Skin</option>
+                        <option value="Dr. David Wilson - General">Dr. David Wilson — General</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="login-btn" id="bookBtn">
+                    Book Appointment <i class="ri-arrow-right-line"></i>
+                </button>
+
+            </form>
+        </div>
+
+    </div>
+
+    <script src="login.js"></script>
+    <script>
+        // Pre-select doctor from URL query param (e.g. doctor.html links)
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const docParam = params.get('doctor');
+            if (docParam) {
+                const sel = document.getElementById('doctor');
+                for (let i = 0; i < sel.options.length; i++) {
+                    if (sel.options[i].value.toLowerCase().includes(
+                            docParam.split(' - ')[0].toLowerCase().replace('dr. ', '')
+                        )) {
+                        sel.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+        })();
+    </script>
+</body>
+
+</html>

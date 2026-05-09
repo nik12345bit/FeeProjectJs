@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Meet our expert doctors at MedicalCare. Find specialists in Bones, Heart, Pediatrics, Neurology, Dermatology and General Medicine.">
+    <title>Our Doctors — MedicalCare</title>
+    <link rel="shortcut icon" href="assets/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="doctor-header">
+        <a href="index.html" class="doc-back-link"><i class="ri-arrow-left-line"></i> Back to Home</a>
+        <h1>Meet Our Doctors</h1>
+        <p>Professional &amp; Experienced Medical Experts</p>
+
+        <!-- SEARCH BAR -->
+        <div class="doc-search-wrap">
+            <i class="ri-search-line"></i>
+            <input type="text" id="docSearch" placeholder="Search by name or specialty..." class="doc-search-input" autocomplete="off">
+            <select id="docFilter" class="doc-filter-select">
+                <option value="">All Specialties</option>
+                <option value="bone">Bones</option>
+                <option value="cardio">Heart</option>
+                <option value="child">Child</option>
+                <option value="neuro">Neuro</option>
+                <option value="skin">Skin</option>
+                <option value="general">General</option>
+            </select>
+        </div>
+        <p id="docResultCount" style="color:rgba(255,255,255,0.8);font-size:0.9rem;margin-top:0.5rem"></p>
+    </header>
+
+    <!-- DOCTORS GRID -->
+    <section class="doctor section">
+        <div class="doctor__container" id="doctorGrid">
+
+            <div class="doctor__card" data-name="dr myla harts" data-spec="bone">
+                <img src="assets/doctor1.jpg" class="doctor__img" alt="Dr. Myla Harts — Bone Specialist" loading="lazy">
+                <h3>Dr. Myla Harts</h3>
+                <p class="special">Bone Specialist</p>
+                <p><b>Qualification:</b> MBBS, MS Orthopedics</p>
+                <p><b>Experience:</b> 12 Years</p>
+                <div class="doctor__social">
+                    <a href="tel:+919876540001" aria-label="Call Dr. Myla Harts"><i class="ri-phone-fill"></i></a>
+                    <a href="mailto:myla.harts@medicalcare.com" aria-label="Email Dr. Myla Harts"><i class="ri-mail-fill"></i></a>
+                </div>
+                <a href="login.html?doctor=Dr.%20Myla%20Harts%20-%20Bones" class="book-btn">Book Appointment</a>
+            </div>
+
+            <div class="doctor__card" data-name="dr john smith" data-spec="cardio">
+                <img src="assets/doctor2.jpg" class="doctor__img" alt="Dr. John Smith — Cardiologist" loading="lazy">
+                <h3>Dr. John Smith</h3>
+                <p class="special">Cardiologist</p>
+                <p><b>Qualification:</b> MBBS, MD Cardiology</p>
+                <p><b>Experience:</b> 18 Years</p>
+                <div class="doctor__social">
+                    <a href="tel:+919876540002" aria-label="Call Dr. John Smith"><i class="ri-phone-fill"></i></a>
+                    <a href="mailto:john.smith@medicalcare.com" aria-label="Email Dr. John Smith"><i class="ri-mail-fill"></i></a>
+                </div>
+                <a href="login.html?doctor=Dr.%20John%20Smith%20-%20Heart" class="book-btn">Book Appointment</a>
+            </div>
+
+            <div class="doctor__card" data-name="dr sarah lee" data-spec="child">
+                <img src="assets/doctor3.jpg" class="doctor__img" alt="Dr. Sarah Lee — Pediatrician" loading="lazy">
+                <h3>Dr. Sarah Lee</h3>
+                <p class="special">Pediatrician</p>
+                <p><b>Qualification:</b> MBBS, MD Pediatrics</p>
+                <p><b>Experience:</b> 9 Years</p>
+                <div class="doctor__social">
+                    <a href="tel:+919876540003" aria-label="Call Dr. Sarah Lee"><i class="ri-phone-fill"></i></a>
+                    <a href="mailto:sarah.lee@medicalcare.com" aria-label="Email Dr. Sarah Lee"><i class="ri-mail-fill"></i></a>
+                </div>
+                <a href="login.html?doctor=Dr.%20Sarah%20Lee%20-%20Child" class="book-btn">Book Appointment</a>
+            </div>
+
+            <div class="doctor__card" data-name="dr michael brown" data-spec="neuro">
+                <img src="assets/doctor4.jpg" class="doctor__img" alt="Dr. Michael Brown — Neurologist" loading="lazy">
+                <h3>Dr. Michael Brown</h3>
+                <p class="special">Neurologist</p>
+                <p><b>Qualification:</b> MBBS, DM Neurology</p>
+                <p><b>Experience:</b> 15 Years</p>
+                <div class="doctor__social">
+                    <a href="tel:+919876540004" aria-label="Call Dr. Michael Brown"><i class="ri-phone-fill"></i></a>
+                    <a href="mailto:michael.brown@medicalcare.com" aria-label="Email Dr. Michael Brown"><i class="ri-mail-fill"></i></a>
+                </div>
+                <a href="login.html?doctor=Dr.%20Michael%20Brown%20-%20Neuro" class="book-btn">Book Appointment</a>
+            </div>
+
+            <div class="doctor__card" data-name="dr emily davis" data-spec="skin">
+                <img src="assets/doctor5.jpg" class="doctor__img" alt="Dr. Emily Davis — Dermatologist" loading="lazy">
+                <h3>Dr. Emily Davis</h3>
+                <p class="special">Dermatologist</p>
+                <p><b>Qualification:</b> MBBS, MD Dermatology</p>
+                <p><b>Experience:</b> 7 Years</p>
+                <div class="doctor__social">
+                    <a href="tel:+919876540005" aria-label="Call Dr. Emily Davis"><i class="ri-phone-fill"></i></a>
+                    <a href="mailto:emily.davis@medicalcare.com" aria-label="Email Dr. Emily Davis"><i class="ri-mail-fill"></i></a>
+                </div>
+                <a href="login.html?doctor=Dr.%20Emily%20Davis%20-%20Skin" class="book-btn">Book Appointment</a>
+            </div>
+
+            <div class="doctor__card" data-name="dr david wilson" data-spec="general">
+                <img src="assets/doctor6.jpg" class="doctor__img" alt="Dr. David Wilson — General Physician" loading="lazy">
+                <h3>Dr. David Wilson</h3>
+                <p class="special">General Physician</p>
+                <p><b>Qualification:</b> MBBS, MD General Medicine</p>
+                <p><b>Experience:</b> 20 Years</p>
+                <div class="doctor__social">
+                    <a href="tel:+919876540006" aria-label="Call Dr. David Wilson"><i class="ri-phone-fill"></i></a>
+                    <a href="mailto:david.wilson@medicalcare.com" aria-label="Email Dr. David Wilson"><i class="ri-mail-fill"></i></a>
+                </div>
+                <a href="login.html?doctor=Dr.%20David%20Wilson%20-%20General" class="book-btn">Book Appointment</a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" style="margin-top:3rem;">
+        <div class="footer__container container grid">
+            <a href="index.html" class="footer__logo">
+                <i class="ri-stethoscope-line"></i> MedicalCare
+            </a>
+            <div class="footer__links">
+                <a href="index.html" class="footer__link">Home</a>
+                <a href="index.html#about" class="footer__link">About</a>
+                <a href="index.html#prices" class="footer__link">Prices</a>
+            </div>
+        </div>
+        <span class="footer__copy">&#169; 2026 MedicalCare. All Rights Reserved.</span>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/919876543210?text=Hello,%20I%20need%20more%20information!"
+       target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
+        <i class="ri-whatsapp-fill"></i>
+    </a>
+
+    <script>
+        // Search + filter
+        const searchInput = document.getElementById('docSearch');
+        const filterSelect = document.getElementById('docFilter');
+        const cards = document.querySelectorAll('.doctor__card');
+        const resultCount = document.getElementById('docResultCount');
+
+        function filterDoctors() {
+            const query = searchInput.value.toLowerCase().trim();
+            const spec  = filterSelect.value;
+            let visible = 0;
+
+            cards.forEach(card => {
+                const name   = card.dataset.name;
+                const cardSpec = card.dataset.spec;
+                const matchQuery = !query || name.includes(query) || cardSpec.includes(query);
+                const matchSpec  = !spec  || cardSpec === spec;
+
+                if (matchQuery && matchSpec) {
+                    card.style.display = '';
+                    visible++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            resultCount.textContent = visible + ' doctor' + (visible !== 1 ? 's' : '') + ' found';
+        }
+
+        searchInput.addEventListener('input', filterDoctors);
+        filterSelect.addEventListener('change', filterDoctors);
+        filterDoctors();
+    </script>
+</body>
+</html>

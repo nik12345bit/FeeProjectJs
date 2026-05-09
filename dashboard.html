@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Dashboard — MedicalCare</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+</head>
+<body class="dashboard-body">
+
+    <header class="dash-header">
+        <h1 class="dash-logo"><i class="ri-stethoscope-line"></i> MedicalCare</h1>
+        <div id="liveClock" class="live-clock"></div>
+        <button class="back-btn small-btn" onclick="goHome()">
+            <i class="ri-home-4-line"></i> Home
+        </button>
+    </header>
+
+    <main class="dash-main">
+
+        <!-- APPOINTMENT CONFIRMED -->
+        <section class="card confirm-card">
+            <h2><i class="ri-checkbox-circle-line"></i> Appointment Confirmed</h2>
+            <p class="sub">Your booking details — click any row to copy it.</p>
+            <div id="patientInfo" class="receipt-grid"></div>
+            <div class="confirm-actions">
+                <button class="action-btn" id="printBtn"><i class="ri-printer-line"></i> Print</button>
+                <button class="action-btn danger" id="cancelBtn"><i class="ri-close-circle-line"></i> Cancel Appointment</button>
+            </div>
+        </section>
+
+        <!-- DOCTORS DIRECTORY -->
+        <section class="card doctors-card">
+            <h2><i class="ri-team-line"></i> Find a Doctor</h2>
+            <p class="sub">Filter by specialty, sort by name / rating / experience.</p>
+
+            <div class="filter-row">
+                <input type="text" id="searchDoc" class="dash-input" placeholder="Search doctor name...">
+                <select id="filterSpecialty" class="dash-select">
+                    <option value="">All Specialties</option>
+                    <option value="Bones">Bones</option>
+                    <option value="Heart">Heart</option>
+                    <option value="Child">Child</option>
+                    <option value="Neuro">Neuro</option>
+                    <option value="Skin">Skin</option>
+                    <option value="General">General</option>
+                </select>
+                <!-- Event delegation: one listener handles all 3 sort buttons -->
+                <div id="sortBtns" class="sort-btns">
+                    <button data-sort="name">A–Z</button>
+                    <button data-sort="experience">Exp</button>
+                    <button data-sort="rating">★ Rating</button>
+                </div>
+            </div>
+
+            <p class="sub" id="docCount"></p>
+            <div id="doctorList" class="doctor-list"></div>
+        </section>
+
+        <!-- BROWSER / SESSION INFO -->
+        <section class="card browser-card">
+            <h2><i class="ri-computer-line"></i> Browser Info</h2>
+            <p class="sub"><code>window.navigator</code> properties</p>
+            <div id="browserInfo" class="browser-grid"></div>
+        </section>
+
+
+        <!-- APPOINTMENT HISTORY -->
+        <section class="card history-card">
+            <h2><i class="ri-history-line"></i> Appointment History</h2>
+            <p class="sub">All past bookings saved in this browser.</p>
+            <div id="historyList" class="history-list"></div>
+            <button class="action-btn danger" id="clearHistoryBtn" style="margin-top:1rem">
+                <i class="ri-delete-bin-line"></i> Clear History
+            </button>
+        </section>
+
+    </main>
+
+    <script>
+    // ============================================================
+    // DASHBOARD SCRIPT — Syllabus topics:
+    //   JSON.parse · Object destructuring · Array destructuring
+    //   for...in · for...of · while · do...while · break · continue
+    //   switch · map() · filter() · reduce() · sort()
+    //   Symbol · BigInt · null/undefined
+    //   setInterval · window.navigator · window.confirm · window.alert
+    //   Event delegation · bubbling & capturing · innerHTML
+    //   createElement · appendChild · removeChild (delete node)
+    //   Promises · try/catch · Recursive function
+    //   Deep copy vs shallow copy · closures
+    // ============================================================
+
+
+    // ── 1. SYMBOLS & BIGINT ─────────────────────────────────────
+    const SESSION_SYM  = Symbol("sessionID");           // Symbol
+    const RECORD_LIMIT = BigInt(1000000);               // BigInt
+    console.log("Session symbol:", SESSION_SYM.toString());
+    console.log("Max records (BigInt):", RECORD_LIMIT);
+
+
+    // ── 2. DOCTORS DATA ─────────────────────────────────────────
+    const doctors = [
+        { id: 1, name: "Dr. Myla Harts",    specialty: "Bones",   experience: 12, rating: 4.8, available: true  },
+        { id: 2, name: "Dr. John Smith",    specialty: "Heart",   experience: 18, rating: 4.9, available: true  },
+        { id: 3, name: "Dr. Sarah Lee",     specialty: "Child",   experience: 9,  rating: 4.7, available: false },
+        { id: 4, name: "Dr. Michael Brown", specialty: "Neuro",   experience: 15, rating: 4.6, available: true  },
+        { id: 5, name: "Dr. Emily Davis",   specialty: "Skin",    experience: 7,  rating: 4.5, available: true  },
+        { id: 6, name: "Dr. David Wilson",  specialty: "General", experience: 20, rating: 4.8, available: false }
+    ];
+
+    // reduce(): total experience
+    const totalExp = doctors.reduce((sum, d) => sum + d.experience, 0);
+    // Array destructuring: pull first two doctors
+    const [topDoc, secondDoc, ...restDocs] = doctors;
+    console.log("Top doctor:", topDoc.name);
+    console.log("Second doctor:", secondDoc.name);
+    console.log("Remaining doctors:", restDocs.length);
+    console.log("Total experience:", totalExp, "years");
+    console.table(doctors);
+
+
+    // ── 3. LOAD PATIENT DATA ─────────────────────────────────────
+    let data = null;
+    try {
+        data = JSON.parse(localStorage.getItem("patientData"));  // JSON.parse
+    } catch (err) {
+        console.error("Parse error:", err);
+    }
+
+    if (data) {
+        // Object destructuring
+        const { name, age, gender, phone, disease, doctor, time } = data;
+
+        // switch: pick icon by specialty
+        function getSpecialtyIcon(docStr) {
+            const parts = docStr.split("- ");
+            const spec = parts.length > 1 ? parts[1] : "";
+            switch (spec.trim()) {
+                case "Bones":   return "ri-bone-line";
+                case "Heart":   return "ri-heart-pulse-line";
+                case "Child":   return "ri-parent-line";
+                case "Neuro":   return "ri-brain-line";
+                case "Skin":    return "ri-droplet-line";
+                case "General": return "ri-stethoscope-line";
+                default:        return "ri-hospital-line";
+            }
+        }
+
+        const receiptEl = document.getElementById("patientInfo");
+
+        // Doctor banner
+        const banner = document.createElement("div");
+        banner.className = "doc-icon-banner";
+        banner.innerHTML = `<i class="${getSpecialtyIcon(doctor)}"></i> ${doctor}`;
+        receiptEl.appendChild(banner);
+
+        // for...in: build rows from object keys
+        const fields = { Name: name, Age: age, Gender: gender, Phone: phone, "Issue": disease, Doctor: doctor, "Preferred Time": time, Status: "Confirmed ✅" };
+        for (let key in fields) {
+            const row = document.createElement("div");
+            row.className = "receipt-row";
+            row.title = "Click to copy";
+            row.innerHTML = `<span class="rkey">${key}</span><span class="rval">${fields[key]}</span>`;
+
+            // Copy on click (click each row to copy value)
+            row.addEventListener("click", function () {
+                navigator.clipboard?.writeText(fields[key]);
+                this.style.background = "#d4edda";
+                setTimeout(() => this.style.background = "", 800);
+            });
+            receiptEl.appendChild(row);
+        }
+
+    } else {
+        console.warn("No patient data in localStorage.");
+        document.getElementById("patientInfo").innerHTML =
+            `<p style="color:#c0392b;padding:1rem">No appointment data found.
+             <a href="login.html">Book an appointment</a></p>`;
+    }
+
+
+    // ── 4. RENDER DOCTORS ────────────────────────────────────────
+    let currentList = [...doctors];   // spread copy
+
+    function renderDoctors(list) {
+        const container = document.getElementById("doctorList");
+
+        if (list.length === 0) {
+            container.innerHTML = `<p style="color:#888;padding:1rem">No doctors found.</p>`;
+            document.getElementById("docCount").textContent = "0 doctors found";
+            return;
+        }
+
+        // map(): each doctor → HTML card string
+        container.innerHTML = list.map(doc => `
+            <div class="doc-card ${doc.available ? "" : "unavailable"}" data-id="${doc.id}">
+                <div class="doc-top">
+                    <div class="doc-avatar">${doc.name.split(" ").map(w=>w[0]).slice(0,2).join("")}</div>
+                    <div>
+                        <strong>${doc.name}</strong>
+                        <span class="badge">${doc.specialty}</span>
+                    </div>
+                </div>
+                <div class="doc-stats">
+                    <span><i class="ri-time-line"></i> ${doc.experience} yrs</span>
+                    <span><i class="ri-star-fill"></i> ${doc.rating}</span>
+                    <span class="${doc.available ? "avail" : "unavail"}">${doc.available ? "Available" : "Busy"}</span>
+                </div>
+                ${doc.available
+                    ? `<a href="login.html?doctor=${encodeURIComponent(doc.name)}" class="book-mini-btn">Book</a>`
+                    : `<span class="book-mini-btn disabled">Unavailable</span>`
+                }
+            </div>
+        `).join("");
+
+        document.getElementById("docCount").textContent = list.length + " doctor(s) shown";
+    }
+
+    renderDoctors(doctors);
+
+    // Search by name
+    document.getElementById("searchDoc").addEventListener("input", applyFilters);
+    document.getElementById("filterSpecialty").addEventListener("change", applyFilters);
+
+    function applyFilters() {
+        const query    = document.getElementById("searchDoc").value.toLowerCase();
+        const specialty = document.getElementById("filterSpecialty").value;
+
+        // filter() + continue logic: build filtered list
+        let filtered = [];
+        for (const doc of doctors) {
+            if (specialty && doc.specialty !== specialty) continue; // continue: skip wrong specialty
+            if (query && !doc.name.toLowerCase().includes(query))  continue; // continue: skip non-match
+            filtered.push(doc);
+        }
+
+        currentList = filtered;
+        renderDoctors(filtered);
+    }
+
+    // Event delegation on sort buttons (bubbling: click fires on button, bubbles to parent div)
+    document.getElementById("sortBtns").addEventListener("click", function (e) {
+        const btn = e.target.closest("button");
+        if (!btn) return;
+
+        const key = btn.dataset.sort;
+        const sorted = [...currentList].sort((a, b) => {
+            if (key === "name") return a.name.localeCompare(b.name);
+            return b[key] - a[key];
+        });
+        renderDoctors(sorted);
+    });
+
+    // ── Event Bubbling & Capturing DEMO ──────────────────────────
+    // Capturing: fires outer → inner; Bubbling: fires inner → outer
+    const doctorList = document.getElementById("doctorList");
+
+    // Capturing phase (3rd arg = true)
+    doctorList.addEventListener("click", function (e) {
+        console.log("[CAPTURING] Outer doctorList caught click");
+    }, true);
+
+    // Bubbling phase (default, 3rd arg = false)
+    doctorList.addEventListener("click", function (e) {
+        const card = e.target.closest(".doc-card");
+        if (card) {
+            console.log("[BUBBLING] Card clicked, id:", card.dataset.id);
+        }
+    }, false);
+
+
+    // ── 5. DELETE NODE: cancel appointment ───────────────────────
+    document.getElementById("cancelBtn").addEventListener("click", function () {
+        const confirmed = window.confirm("Cancel your appointment? This cannot be undone.");
+        if (!confirmed) return;
+
+        // Save to history as cancelled before removing
+        if (data) {
+            const history = JSON.parse(localStorage.getItem("appointmentHistory") || "[]");
+            history.unshift({ ...data, status: "Cancelled ❌", date: new Date().toLocaleString() });
+            localStorage.setItem("appointmentHistory", JSON.stringify(history));
+        }
+
+        // removeChild: remove the receipt rows one by one
+        const receipt = document.getElementById("patientInfo");
+        while (receipt.firstChild) {
+            receipt.removeChild(receipt.firstChild);   // removeChild (delete node)
+        }
+
+        // Replace with cancelled message + re-book button
+        const msg = document.createElement("p");
+        msg.style.cssText = "color:#c0392b;padding:0.5rem 0;font-weight:600;";
+        msg.textContent = "❌ Appointment cancelled.";
+        receipt.appendChild(msg);
+
+        const reBook = document.createElement("a");
+        reBook.href = "login.html";
+        reBook.className = "action-btn";
+        reBook.style.cssText = "display:inline-flex;margin-top:0.8rem;text-decoration:none;";
+        reBook.innerHTML = "<i class='ri-calendar-line'></i> Book a New Appointment";
+        receipt.appendChild(reBook);
+
+        localStorage.removeItem("patientData");
+        this.disabled = true;
+        document.getElementById("printBtn").disabled = true;
+
+        window.alert("Your appointment has been cancelled. You can book a new one anytime.");
+        renderHistory(); // refresh history panel
+    });
+
+    document.getElementById("printBtn").addEventListener("click", () => window.print());
+
+
+    // ── 6. LIVE CLOCK — setInterval ──────────────────────────────
+    function updateClock() {
+        const now  = new Date();
+        const [hrs, mins, secs] = now.toTimeString().split(":"); // Array destructuring
+        document.getElementById("liveClock").textContent =
+            `${hrs}:${mins}:${secs.slice(0,2)}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+
+    // ── 7. WINDOW.NAVIGATOR ──────────────────────────────────────
+    const navInfo = {
+        Browser:   navigator.appCodeName,
+        Platform:  navigator.platform,
+        Language:  navigator.language,
+        "Online":  navigator.onLine ? "Yes" : "No",
+        Cookies:   navigator.cookieEnabled ? "Enabled" : "Disabled"
+    };
+
+    const browserEl = document.getElementById("browserInfo");
+    for (const [key, val] of Object.entries(navInfo)) {  // for...of + destructuring
+        const item = document.createElement("div");
+        item.className = "browser-item";
+        item.innerHTML = `<span class="rkey">${key}</span><span class="rval">${val}</span>`;
+        browserEl.appendChild(item);
+    }
+
+
+    // ── 8. PROMISE — async server confirmation ────────────────────
+    function confirmBookingAsync(patientName) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                patientName
+                    ? resolve("Server: appointment confirmed for " + patientName)
+                    : reject(new Error("No patient name"));
+            }, 600);
+        });
+    }
+
+    if (data) {
+        confirmBookingAsync(data.name)
+            .then(msg  => console.log("✅ Promise resolved:", msg))
+            .catch(err => console.error("❌ Promise rejected:", err));
+    }
+
+
+    // ── 9. DEEP vs SHALLOW COPY ───────────────────────────────────
+    if (data) {
+        const shallow = Object.assign({}, data);  // shallow — top-level copy only
+        const deep    = JSON.parse(JSON.stringify(data));  // deep — fully independent
+
+        deep.name = "[Deep Copy Modified]";
+        console.log("Original name:", data.name);   // unchanged
+        console.log("Deep copy:", deep.name);        // changed
+        console.log("Shallow copy:", shallow);
+    }
+
+
+    // ── 10. RECURSIVE FUNCTION ────────────────────────────────────
+    function countdown(n) {
+        if (n <= 0) { console.log("🔔 Appointment reminder sent!"); return; }
+        console.log("Reminder in " + n + "...");
+        countdown(n - 1);   // recursive call
+    }
+    countdown(3);
+
+
+    // ── 11. NULL & UNDEFINED ─────────────────────────────────────
+    let userToken  = null;       // null: intentionally empty
+    let sessionAge = undefined;  // undefined: not yet set
+    console.log("token is null?",      userToken  === null);       // true
+    console.log("age is undefined?",   sessionAge === undefined);  // true
+
+
+    // ── 12. WHILE — retry loading data ───────────────────────────
+    let retries = 0;
+    let loaded  = false;
+    while (retries < 3 && !loaded) {
+        const check = localStorage.getItem("patientData");
+        if (check) { loaded = true; console.log("Data loaded on attempt", retries + 1); }
+        retries++;
+    }
+    if (!loaded) console.warn("Data not found after retries.");
+
+
+    // ── 13. DO...WHILE — build time slots ────────────────────────
+    const timeSlots = [];
+    let hour = 8;
+    do {
+        timeSlots.push(hour + ":00");
+        hour++;
+    } while (hour <= 17);
+    console.log("Available time slots:", timeSlots);
+
+
+    // ── 14. NAVIGATION ───────────────────────────────────────────
+    function goHome() {
+        const ok = window.confirm("Return to the home page?");
+        if (ok) window.location.href = "index.html";
+    }
+
+
+    // ── 15. APPOINTMENT HISTORY ───────────────────────────────────
+    // Save current confirmed appointment to history
+    if (data) {
+        const history = JSON.parse(localStorage.getItem("appointmentHistory") || "[]");
+        // Only add if not already saved (avoid duplicates on refresh)
+        const alreadySaved = history.some(h => h.name === data.name && h.doctor === data.doctor && h.status === "Confirmed ✅");
+        if (!alreadySaved) {
+            history.unshift({ ...data, status: "Confirmed ✅", date: new Date().toLocaleString() });
+            localStorage.setItem("appointmentHistory", JSON.stringify(history));
+        }
+    }
+
+    function renderHistory() {
+        const histEl = document.getElementById("historyList");
+        const history = JSON.parse(localStorage.getItem("appointmentHistory") || "[]");
+
+        if (history.length === 0) {
+            histEl.innerHTML = "<p style='color:#888;padding:0.5rem'>No past appointments yet.</p>";
+            return;
+        }
+
+        histEl.innerHTML = history.map((appt, i) => `
+            <div class="history-item">
+                <div class="history-top">
+                    <span class="history-num">#${history.length - i}</span>
+                    <span class="history-name">${appt.name}</span>
+                    <span class="history-date">${appt.date}</span>
+                    <span class="history-status ${appt.status.includes('Confirmed') ? 'h-confirmed' : 'h-cancelled'}">${appt.status}</span>
+                </div>
+                <div class="history-details">
+                    <span><i class="ri-stethoscope-line"></i> ${appt.doctor}</span>
+                    <span><i class="ri-virus-line"></i> ${appt.disease}</span>
+                    <span><i class="ri-time-line"></i> ${appt.time || "Not specified"}</span>
+                </div>
+            </div>
+        `).join("");
+    }
+
+    renderHistory();
+
+    document.getElementById("clearHistoryBtn").addEventListener("click", function () {
+        const ok = window.confirm("Clear all appointment history?");
+        if (!ok) return;
+        localStorage.removeItem("appointmentHistory");
+        renderHistory();
+    });
+
+    </script>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/919876543210?text=Hello,%20I%20need%20more%20information!"
+       target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
+        <i class="ri-whatsapp-fill"></i>
+    </a>
+    <script src="script.js"></script>
+</body>
+</html>
