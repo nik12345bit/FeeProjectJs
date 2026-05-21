@@ -7,37 +7,226 @@
     <link rel="stylesheet" href="login.css">
     <link rel="stylesheet" href="dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        /* ── ENHANCED HEADER ── */
+        .dash-header {
+            background: rgba(10,30,80,0.85);
+            backdrop-filter: blur(16px);
+            padding: 1rem 2rem;
+            display: flex; align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap; gap: .8rem;
+            border-bottom: 1px solid rgba(255,255,255,.1);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .dash-logo { font-size: 1.35rem; font-weight: 800; letter-spacing: .5px; }
+
+        .header-center {
+            display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+        }
+        .live-clock {
+            font-size: .95rem; font-weight: 700;
+            background: rgba(255,255,255,.12);
+            padding: 7px 16px; border-radius: 20px; color: white;
+            border: 1px solid rgba(255,255,255,.2);
+            font-variant-numeric: tabular-nums;
+        }
+        .live-date {
+            font-size: .8rem; color: rgba(255,255,255,.7); font-weight: 500;
+        }
+
+        /* ── WELCOME BANNER ── */
+        .welcome-banner {
+            background: linear-gradient(120deg,rgba(255,255,255,.15),rgba(255,255,255,.05));
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin: 1.5rem auto;
+            max-width: 1100px;
+            margin-left: auto; margin-right: auto;
+            margin-top: 1.5rem;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 1rem;
+            padding-left: 1.5rem; padding-right: 1.5rem;
+        }
+        .welcome-banner h2 { color: white; font-size: 1.3rem; margin: 0; }
+        .welcome-banner p  { color: rgba(255,255,255,.8); font-size: .88rem; margin: .2rem 0 0; }
+        .welcome-meta { display: flex; gap: 10px; flex-wrap: wrap; }
+        .meta-chip {
+            background: rgba(255,255,255,.15);
+            color: white; font-size: .78rem; font-weight: 600;
+            padding: 5px 12px; border-radius: 20px;
+            display: flex; align-items: center; gap: 5px;
+            border: 1px solid rgba(255,255,255,.2);
+        }
+
+        /* ── CONFIRM CARD ── */
+        .confirm-card {
+            border-left: 4px solid #27ae60;
+        }
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #d4edda; color: #155724;
+            font-size: .78rem; font-weight: 700;
+            padding: 4px 12px; border-radius: 20px;
+            margin-bottom: .8rem;
+        }
+
+        /* ── TIMELINE RECEIPT ── */
+        .receipt-timeline {
+            position: relative;
+            margin-top: 1rem;
+        }
+        .receipt-timeline::before {
+            content: '';
+            position: absolute; left: 19px; top: 0; bottom: 0;
+            width: 2px; background: linear-gradient(180deg,#0a4ba8,#1c8dfc);
+            border-radius: 2px;
+        }
+        .timeline-row {
+            display: flex; align-items: flex-start; gap: 14px;
+            margin-bottom: 14px; position: relative;
+        }
+        .timeline-dot {
+            width: 40px; height: 40px; flex-shrink: 0;
+            background: linear-gradient(135deg,#0a4ba8,#1c8dfc);
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; color: white; font-size: .95rem;
+            box-shadow: 0 4px 12px rgba(10,75,168,.3); z-index: 1;
+        }
+        .timeline-content {
+            flex: 1; background: #f5f7fb; border-radius: 10px;
+            padding: 10px 14px; cursor: pointer; transition: .2s;
+            border: 1.5px solid transparent;
+        }
+        .timeline-content:hover {
+            background: #eaf2ff; border-color: #1c8dfc;
+            transform: translateX(4px);
+        }
+        .timeline-key { font-size: .75rem; font-weight: 700; color: #0a4ba8; text-transform: uppercase; letter-spacing: .5px; }
+        .timeline-val { font-size: .92rem; color: #1a2a44; margin-top: 2px; font-weight: 500; }
+
+        /* ── QUICK STATS ── */
+        .quick-stats {
+            display: grid; grid-template-columns: repeat(3,1fr);
+            gap: 10px; margin-top: 1rem;
+        }
+        .qstat {
+            background: linear-gradient(135deg,#0a4ba8,#1c8dfc);
+            color: white; border-radius: 12px; padding: 14px;
+            text-align: center;
+        }
+        .qstat .num { font-size: 1.5rem; font-weight: 800; }
+        .qstat .lbl { font-size: .72rem; opacity: .85; margin-top: 2px; }
+
+        /* ── DOC CARDS ENHANCED ── */
+        .doc-card {
+            transition: all .25s; position: relative;
+        }
+        .doc-card .availability-bar {
+            height: 4px; border-radius: 0 0 8px 8px;
+            margin: 8px -12px -12px; position: absolute;
+            bottom: 0; left: 0; right: 0; border-radius: 0 0 10px 10px;
+        }
+        .doc-card.available-true .availability-bar { background: #27ae60; }
+        .doc-card.available-false .availability-bar { background: #e74c3c; }
+
+        .rating-stars { color: #ffc107; font-size: .8rem; }
+
+        /* ── HISTORY ENHANCED ── */
+        .history-timeline {
+            display: flex; flex-direction: column; gap: 12px;
+        }
+        .hist-item {
+            background: white; border-radius: 12px;
+            padding: 14px 18px; border: 1.5px solid #e8ecf5;
+            transition: .25s; position: relative; overflow: hidden;
+        }
+        .hist-item::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+            width: 4px; background: linear-gradient(180deg,#0a4ba8,#1c8dfc);
+        }
+        .hist-item:hover { border-color: #1c8dfc; transform: translateX(4px); background: #f8fbff; }
+
+        /* ── JS CONCEPTS PANEL ── */
+        .concepts-panel {
+            grid-column: 1 / -1;
+            background: #1a1a2e; border-radius: 16px;
+            padding: 1.5rem; color: #e8ecf5;
+        }
+        .concepts-panel h2 { color: #1c8dfc !important; margin-bottom: .3rem; }
+        .concepts-panel .sub { color: rgba(255,255,255,.5) !important; margin-bottom: 1.2rem; }
+        .concept-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .ctag {
+            background: rgba(28,141,252,.15); border: 1px solid rgba(28,141,252,.35);
+            color: #7ec8f7; font-size: .75rem; font-weight: 700;
+            padding: 5px 12px; border-radius: 6px; font-family: monospace;
+            letter-spacing: .3px; cursor: default; transition: .2s;
+        }
+        .ctag:hover { background: rgba(28,141,252,.3); color: white; transform: translateY(-2px); }
+        .ctag.used { background: rgba(39,174,96,.12); border-color: rgba(39,174,96,.35); color: #6fd99a; }
+
+        @media (max-width: 600px) {
+            .quick-stats { grid-template-columns: repeat(2,1fr); }
+            .welcome-banner { flex-direction: column; }
+        }
+    </style>
 </head>
 <body class="dashboard-body">
 
     <header class="dash-header">
         <h1 class="dash-logo"><i class="ri-stethoscope-line"></i> MedicalCare</h1>
-        <div id="liveClock" class="live-clock"></div>
+        <div class="header-center">
+            <div id="liveClock" class="live-clock">00:00:00</div>
+            <div id="liveDate" class="live-date"></div>
+        </div>
         <button class="back-btn small-btn" onclick="goHome()">
             <i class="ri-home-4-line"></i> Home
         </button>
     </header>
 
+    <!-- WELCOME BANNER -->
+    <div class="dash-main" style="display:block;padding:0 1.5rem;">
+        <div class="welcome-banner" id="welcomeBanner">
+            <div>
+                <h2 id="welcomeText">Welcome back!</h2>
+                <p>Your appointment has been successfully confirmed.</p>
+            </div>
+            <div class="welcome-meta">
+                <div class="meta-chip"><i class="ri-calendar-check-line"></i> <span id="metaDoctor">Loading...</span></div>
+                <div class="meta-chip"><i class="ri-time-line"></i> <span id="metaTime">--</span></div>
+            </div>
+        </div>
+    </div>
+
     <main class="dash-main">
 
         <!-- APPOINTMENT CONFIRMED -->
         <section class="card confirm-card">
-            <h2><i class="ri-checkbox-circle-line"></i> Appointment Confirmed</h2>
-            <p class="sub">Your booking details — click any row to copy it.</p>
-            <div id="patientInfo" class="receipt-grid"></div>
+            <div class="status-badge"><i class="ri-checkbox-circle-fill"></i> Confirmed</div>
+            <h2><i class="ri-file-list-3-line"></i> Appointment Details</h2>
+            <p class="sub">Click any row to copy the value to clipboard.</p>
+            <div id="patientInfo" class="receipt-timeline"></div>
+
+            <!-- Quick stats -->
+            <div class="quick-stats" id="quickStats"></div>
+
             <div class="confirm-actions">
-                <button class="action-btn" id="printBtn"><i class="ri-printer-line"></i> Print</button>
-                <button class="action-btn danger" id="cancelBtn"><i class="ri-close-circle-line"></i> Cancel Appointment</button>
+                <button class="action-btn" id="printBtn"><i class="ri-printer-line"></i> Print Receipt</button>
+                <button class="action-btn" id="shareBtn"><i class="ri-share-line"></i> Share</button>
+                <button class="action-btn danger" id="cancelBtn"><i class="ri-close-circle-line"></i> Cancel</button>
             </div>
         </section>
 
         <!-- DOCTORS DIRECTORY -->
         <section class="card doctors-card">
             <h2><i class="ri-team-line"></i> Find a Doctor</h2>
-            <p class="sub">Filter by specialty, sort by name / rating / experience.</p>
-
+            <p class="sub">Filter by specialty · Sort by name / rating / experience</p>
             <div class="filter-row">
-                <input type="text" id="searchDoc" class="dash-input" placeholder="Search doctor name...">
+                <input type="text" id="searchDoc" class="dash-input" placeholder="🔍 Search doctor...">
                 <select id="filterSpecialty" class="dash-select">
                     <option value="">All Specialties</option>
                     <option value="Bones">Bones</option>
@@ -47,61 +236,104 @@
                     <option value="Skin">Skin</option>
                     <option value="General">General</option>
                 </select>
-                <!-- Event delegation: one listener handles all 3 sort buttons -->
                 <div id="sortBtns" class="sort-btns">
                     <button data-sort="name">A–Z</button>
                     <button data-sort="experience">Exp</button>
                     <button data-sort="rating">★ Rating</button>
                 </div>
             </div>
-
             <p class="sub" id="docCount"></p>
             <div id="doctorList" class="doctor-list"></div>
         </section>
 
-        <!-- BROWSER / SESSION INFO -->
+        <!-- BROWSER INFO -->
         <section class="card browser-card">
             <h2><i class="ri-computer-line"></i> Browser Info</h2>
             <p class="sub"><code>window.navigator</code> properties</p>
             <div id="browserInfo" class="browser-grid"></div>
         </section>
 
-
         <!-- APPOINTMENT HISTORY -->
         <section class="card history-card">
             <h2><i class="ri-history-line"></i> Appointment History</h2>
             <p class="sub">All past bookings saved in this browser.</p>
-            <div id="historyList" class="history-list"></div>
+            <div id="historyList" class="history-timeline"></div>
             <button class="action-btn danger" id="clearHistoryBtn" style="margin-top:1rem">
                 <i class="ri-delete-bin-line"></i> Clear History
             </button>
         </section>
 
+        <!-- JS CONCEPTS PANEL -->
+        <section class="card concepts-panel">
+            <h2 style="justify-content:flex-start;font-size:1rem;">
+                <i class="ri-code-s-slash-line" style="color:#1c8dfc;"></i>
+                JavaScript Concepts Used in This Project
+            </h2>
+            <p class="sub">Hover over any concept to highlight it</p>
+            <div class="concept-tags">
+                <span class="ctag used">var / let / const</span>
+                <span class="ctag used">String · Number · Boolean</span>
+                <span class="ctag used">null · undefined</span>
+                <span class="ctag used">Symbol</span>
+                <span class="ctag used">BigInt</span>
+                <span class="ctag used">console.log/warn/error/table</span>
+                <span class="ctag used">if / else</span>
+                <span class="ctag used">for...in</span>
+                <span class="ctag used">for...of</span>
+                <span class="ctag used">while</span>
+                <span class="ctag used">do...while</span>
+                <span class="ctag used">break / continue</span>
+                <span class="ctag used">switch</span>
+                <span class="ctag used">Ternary operator</span>
+                <span class="ctag used">Logical operators</span>
+                <span class="ctag used">Function declaration</span>
+                <span class="ctag used">Arrow function</span>
+                <span class="ctag used">Default parameters</span>
+                <span class="ctag used">Rest parameters (...args)</span>
+                <span class="ctag used">Closure</span>
+                <span class="ctag used">try / catch</span>
+                <span class="ctag used">JSON.stringify / parse</span>
+                <span class="ctag used">Object destructuring</span>
+                <span class="ctag used">Array destructuring</span>
+                <span class="ctag used">map() / filter() / reduce()</span>
+                <span class="ctag used">sort()</span>
+                <span class="ctag used">Promise</span>
+                <span class="ctag used">DOM: createElement</span>
+                <span class="ctag used">appendChild / removeChild</span>
+                <span class="ctag used">addEventListener</span>
+                <span class="ctag used">Event delegation</span>
+                <span class="ctag used">Bubbling &amp; Capturing</span>
+                <span class="ctag used">setTimeout / setInterval</span>
+                <span class="ctag used">window.navigator</span>
+                <span class="ctag used">window.confirm / alert</span>
+                <span class="ctag used">localStorage</span>
+                <span class="ctag used">Deep vs Shallow copy</span>
+                <span class="ctag used">Recursive function</span>
+                <span class="ctag used">IntersectionObserver</span>
+                <span class="ctag used">Canvas API</span>
+                <span class="ctag used">Spread operator (...)</span>
+            </div>
+        </section>
+
     </main>
+
+    <a href="https://wa.me/919876543210?text=Hello,%20I%20need%20more%20information!"
+       target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
+        <i class="ri-whatsapp-fill"></i>
+    </a>
 
     <script>
     // ============================================================
-    // DASHBOARD SCRIPT — Syllabus topics:
-    //   JSON.parse · Object destructuring · Array destructuring
-    //   for...in · for...of · while · do...while · break · continue
-    //   switch · map() · filter() · reduce() · sort()
-    //   Symbol · BigInt · null/undefined
-    //   setInterval · window.navigator · window.confirm · window.alert
-    //   Event delegation · bubbling & capturing · innerHTML
-    //   createElement · appendChild · removeChild (delete node)
-    //   Promises · try/catch · Recursive function
-    //   Deep copy vs shallow copy · closures
+    // DASHBOARD SCRIPT — Comprehensive JS Concepts Demo
     // ============================================================
 
-
-    // ── 1. SYMBOLS & BIGINT ─────────────────────────────────────
-    const SESSION_SYM  = Symbol("sessionID");           // Symbol
-    const RECORD_LIMIT = BigInt(1000000);               // BigInt
+    // ── 1. SYMBOLS & BIGINT ──────────────────────────────────────
+    const SESSION_SYM  = Symbol("sessionID");
+    const RECORD_LIMIT = BigInt(1000000);
     console.log("Session symbol:", SESSION_SYM.toString());
     console.log("Max records (BigInt):", RECORD_LIMIT);
 
-
-    // ── 2. DOCTORS DATA ─────────────────────────────────────────
+    // ── 2. DOCTORS DATA ──────────────────────────────────────────
     const doctors = [
         { id: 1, name: "Dr. Myla Harts",    specialty: "Bones",   experience: 12, rating: 4.8, available: true  },
         { id: 2, name: "Dr. John Smith",    specialty: "Heart",   experience: 18, rating: 4.9, available: true  },
@@ -111,33 +343,52 @@
         { id: 6, name: "Dr. David Wilson",  specialty: "General", experience: 20, rating: 4.8, available: false }
     ];
 
-    // reduce(): total experience
-    const totalExp = doctors.reduce((sum, d) => sum + d.experience, 0);
-    // Array destructuring: pull first two doctors
-    const [topDoc, secondDoc, ...restDocs] = doctors;
-    console.log("Top doctor:", topDoc.name);
-    console.log("Second doctor:", secondDoc.name);
-    console.log("Remaining doctors:", restDocs.length);
-    console.log("Total experience:", totalExp, "years");
+    // reduce, map, filter — array methods
+    const totalExp       = doctors.reduce((sum, d) => sum + d.experience, 0);
+    const availableDocs  = doctors.filter(d => d.available).length;
+    const avgRating      = (doctors.reduce((s,d) => s + d.rating, 0) / doctors.length).toFixed(1);
+    const [topDoc, secondDoc, ...restDocs] = doctors;  // array destructuring
+    console.log("Top doctor:", topDoc.name, "| Second:", secondDoc.name);
+    console.log("Remaining:", restDocs.length, "| Total exp:", totalExp, "| Available:", availableDocs);
     console.table(doctors);
-
 
     // ── 3. LOAD PATIENT DATA ─────────────────────────────────────
     let data = null;
     try {
-        data = JSON.parse(localStorage.getItem("patientData"));  // JSON.parse
+        data = JSON.parse(localStorage.getItem("patientData"));
     } catch (err) {
         console.error("Parse error:", err);
     }
 
+    // ── 4. WELCOME BANNER ────────────────────────────────────────
     if (data) {
-        // Object destructuring
+        const { name, doctor, time } = data;  // object destructuring
+        document.getElementById('welcomeText').textContent = `Welcome, ${name}! 👋`;
+        document.getElementById('metaDoctor').textContent = doctor.split(' - ')[0];
+        document.getElementById('metaTime').textContent = time || 'Not specified';
+    }
+
+    // ── 5. QUICK STATS ───────────────────────────────────────────
+    const quickStats = document.getElementById('quickStats');
+    const statsData = [
+        { num: availableDocs, lbl: 'Available Doctors', icon: 'ri-user-heart-line' },
+        { num: avgRating,     lbl: 'Avg. Rating',        icon: 'ri-star-fill' },
+        { num: totalExp,      lbl: 'Total Exp. (yrs)',   icon: 'ri-award-fill' }
+    ];
+    statsData.forEach(s => {
+        const el = document.createElement('div');
+        el.className = 'qstat';
+        el.innerHTML = `<div class="num"><i class="${s.icon}"></i> ${s.num}</div><div class="lbl">${s.lbl}</div>`;
+        quickStats.appendChild(el);
+    });
+
+    // ── 6. BUILD RECEIPT (timeline) ──────────────────────────────
+    if (data) {
         const { name, age, gender, phone, disease, doctor, time } = data;
 
-        // switch: pick icon by specialty
+        // switch: icon per specialty
         function getSpecialtyIcon(docStr) {
-            const parts = docStr.split("- ");
-            const spec = parts.length > 1 ? parts[1] : "";
+            const spec = docStr.includes('- ') ? docStr.split('- ')[1] : '';
             switch (spec.trim()) {
                 case "Bones":   return "ri-bone-line";
                 case "Heart":   return "ri-heart-pulse-line";
@@ -149,280 +400,258 @@
             }
         }
 
+        const icons = {
+            "Name":           "ri-user-line",
+            "Age":            "ri-cake-line",
+            "Gender":         "ri-user-3-line",
+            "Phone":          "ri-phone-line",
+            "Issue":          "ri-virus-line",
+            "Doctor":         getSpecialtyIcon(doctor),
+            "Preferred Time": "ri-time-line",
+            "Status":         "ri-checkbox-circle-fill"
+        };
+
+        const fields = { Name: name, Age: age, Gender: gender, Phone: phone,
+                         "Issue": disease, Doctor: doctor,
+                         "Preferred Time": time || "Not specified", Status: "Confirmed ✅" };
+
         const receiptEl = document.getElementById("patientInfo");
 
-        // Doctor banner
-        const banner = document.createElement("div");
-        banner.className = "doc-icon-banner";
-        banner.innerHTML = `<i class="${getSpecialtyIcon(doctor)}"></i> ${doctor}`;
-        receiptEl.appendChild(banner);
-
-        // for...in: build rows from object keys
-        const fields = { Name: name, Age: age, Gender: gender, Phone: phone, "Issue": disease, Doctor: doctor, "Preferred Time": time, Status: "Confirmed ✅" };
+        // for...in loop
         for (let key in fields) {
             const row = document.createElement("div");
-            row.className = "receipt-row";
-            row.title = "Click to copy";
-            row.innerHTML = `<span class="rkey">${key}</span><span class="rval">${fields[key]}</span>`;
-
-            // Copy on click (click each row to copy value)
-            row.addEventListener("click", function () {
+            row.className = "timeline-row";
+            row.innerHTML = `
+                <div class="timeline-dot"><i class="${icons[key] || 'ri-information-line'}"></i></div>
+                <div class="timeline-content" title="Click to copy">
+                    <div class="timeline-key">${key}</div>
+                    <div class="timeline-val">${fields[key]}</div>
+                </div>`;
+            row.querySelector('.timeline-content').addEventListener('click', function() {
                 navigator.clipboard?.writeText(fields[key]);
-                this.style.background = "#d4edda";
-                setTimeout(() => this.style.background = "", 800);
+                this.style.background = '#d4edda';
+                this.style.borderColor = '#27ae60';
+                setTimeout(() => { this.style.background = ''; this.style.borderColor = ''; }, 800);
+                showToast('Copied: ' + fields[key], 'success');
             });
             receiptEl.appendChild(row);
         }
 
     } else {
-        console.warn("No patient data in localStorage.");
         document.getElementById("patientInfo").innerHTML =
-            `<p style="color:#c0392b;padding:1rem">No appointment data found.
-             <a href="login.html">Book an appointment</a></p>`;
+            `<p style="color:#c0392b;padding:1rem;font-weight:600;">
+                No appointment data found.
+                <a href="login.html" style="color:#0a4ba8;">Book an appointment →</a>
+             </p>`;
+        document.getElementById('quickStats').style.display = 'none';
     }
 
-
-    // ── 4. RENDER DOCTORS ────────────────────────────────────────
-    let currentList = [...doctors];   // spread copy
+    // ── 7. RENDER DOCTORS ────────────────────────────────────────
+    let currentList = [...doctors];
 
     function renderDoctors(list) {
         const container = document.getElementById("doctorList");
+        container.innerHTML = "";
+        document.getElementById("docCount").textContent =
+            `${list.length} doctor${list.length !== 1 ? 's' : ''} found`;
 
         if (list.length === 0) {
-            container.innerHTML = `<p style="color:#888;padding:1rem">No doctors found.</p>`;
-            document.getElementById("docCount").textContent = "0 doctors found";
+            container.innerHTML = `<p style="color:#888;padding:.5rem">No doctors match your search.</p>`;
             return;
         }
 
-        // map(): each doctor → HTML card string
-        container.innerHTML = list.map(doc => `
-            <div class="doc-card ${doc.available ? "" : "unavailable"}" data-id="${doc.id}">
+        // map() to render
+        list.map(doc => {
+            const div = document.createElement("div");
+            div.className = `doc-card ${doc.available ? 'available-true' : 'available-false unavailable'}`;
+            const stars = '★'.repeat(Math.round(doc.rating)) + '☆'.repeat(5 - Math.round(doc.rating));
+            div.innerHTML = `
                 <div class="doc-top">
-                    <div class="doc-avatar">${doc.name.split(" ").map(w=>w[0]).slice(0,2).join("")}</div>
+                    <div class="doc-avatar">${doc.name.split(' ').slice(1,3).map(w=>w[0]).join('')}</div>
                     <div>
                         <strong>${doc.name}</strong>
                         <span class="badge">${doc.specialty}</span>
                     </div>
                 </div>
                 <div class="doc-stats">
-                    <span><i class="ri-time-line"></i> ${doc.experience} yrs</span>
-                    <span><i class="ri-star-fill"></i> ${doc.rating}</span>
-                    <span class="${doc.available ? "avail" : "unavail"}">${doc.available ? "Available" : "Busy"}</span>
+                    <span><i class="ri-award-line"></i> ${doc.experience} yrs</span>
+                    <span class="rating-stars">${stars}</span>
+                    <span class="${doc.available ? 'avail' : 'unavail'}">${doc.available ? '● Available' : '● Busy'}</span>
                 </div>
                 ${doc.available
-                    ? `<a href="login.html?doctor=${encodeURIComponent(doc.name)}" class="book-mini-btn">Book</a>`
+                    ? `<a href="login.html?doctor=${encodeURIComponent(doc.name + ' - ' + doc.specialty)}" class="book-mini-btn">
+                           <i class="ri-calendar-line"></i> Book
+                       </a>`
                     : `<span class="book-mini-btn disabled">Unavailable</span>`
                 }
-            </div>
-        `).join("");
-
-        document.getElementById("docCount").textContent = list.length + " doctor(s) shown";
-    }
-
-    renderDoctors(doctors);
-
-    // Search by name
-    document.getElementById("searchDoc").addEventListener("input", applyFilters);
-    document.getElementById("filterSpecialty").addEventListener("change", applyFilters);
-
-    function applyFilters() {
-        const query    = document.getElementById("searchDoc").value.toLowerCase();
-        const specialty = document.getElementById("filterSpecialty").value;
-
-        // filter() + continue logic: build filtered list
-        let filtered = [];
-        for (const doc of doctors) {
-            if (specialty && doc.specialty !== specialty) continue; // continue: skip wrong specialty
-            if (query && !doc.name.toLowerCase().includes(query))  continue; // continue: skip non-match
-            filtered.push(doc);
-        }
-
-        currentList = filtered;
-        renderDoctors(filtered);
-    }
-
-    // Event delegation on sort buttons (bubbling: click fires on button, bubbles to parent div)
-    document.getElementById("sortBtns").addEventListener("click", function (e) {
-        const btn = e.target.closest("button");
-        if (!btn) return;
-
-        const key = btn.dataset.sort;
-        const sorted = [...currentList].sort((a, b) => {
-            if (key === "name") return a.name.localeCompare(b.name);
-            return b[key] - a[key];
+                <div class="availability-bar"></div>`;
+            container.appendChild(div);
         });
-        renderDoctors(sorted);
+    }
+    renderDoctors(currentList);
+
+    // Search & filter
+    function applyFilters() {
+        const query   = document.getElementById('searchDoc').value.toLowerCase();
+        const spec    = document.getElementById('filterSpecialty').value;
+        currentList = doctors
+            .filter(d => (!query || d.name.toLowerCase().includes(query)) &&
+                         (!spec  || d.specialty === spec));
+        renderDoctors(currentList);
+    }
+    document.getElementById('searchDoc').addEventListener('input', applyFilters);
+    document.getElementById('filterSpecialty').addEventListener('change', applyFilters);
+
+    // Event delegation on sort buttons
+    document.getElementById('sortBtns').addEventListener('click', function(e) {
+        const btn = e.target.closest('[data-sort]');
+        if (!btn) return;
+        const key = btn.dataset.sort;
+        currentList = [...currentList].sort((a, b) => {
+            if (key === 'name')       return a.name.localeCompare(b.name);
+            if (key === 'experience') return b.experience - a.experience;
+            if (key === 'rating')     return b.rating - a.rating;
+        });
+        renderDoctors(currentList);
     });
 
-    // ── Event Bubbling & Capturing DEMO ──────────────────────────
-    // Capturing: fires outer → inner; Bubbling: fires inner → outer
-    const doctorList = document.getElementById("doctorList");
+    // ── 8. CANCEL BUTTON ─────────────────────────────────────────
+    document.getElementById("cancelBtn").addEventListener("click", function() {
+        const ok = window.confirm("Are you sure you want to cancel this appointment?");
+        if (!ok) return;
 
-    // Capturing phase (3rd arg = true)
-    doctorList.addEventListener("click", function (e) {
-        console.log("[CAPTURING] Outer doctorList caught click");
-    }, true);
-
-    // Bubbling phase (default, 3rd arg = false)
-    doctorList.addEventListener("click", function (e) {
-        const card = e.target.closest(".doc-card");
-        if (card) {
-            console.log("[BUBBLING] Card clicked, id:", card.dataset.id);
-        }
-    }, false);
-
-
-    // ── 5. DELETE NODE: cancel appointment ───────────────────────
-    document.getElementById("cancelBtn").addEventListener("click", function () {
-        const confirmed = window.confirm("Cancel your appointment? This cannot be undone.");
-        if (!confirmed) return;
-
-        // Save to history as cancelled before removing
-        if (data) {
-            const history = JSON.parse(localStorage.getItem("appointmentHistory") || "[]");
-            history.unshift({ ...data, status: "Cancelled ❌", date: new Date().toLocaleString() });
-            localStorage.setItem("appointmentHistory", JSON.stringify(history));
-        }
-
-        // removeChild: remove the receipt rows one by one
         const receipt = document.getElementById("patientInfo");
-        while (receipt.firstChild) {
-            receipt.removeChild(receipt.firstChild);   // removeChild (delete node)
-        }
+        while (receipt.firstChild) receipt.removeChild(receipt.firstChild); // removeChild
 
-        // Replace with cancelled message + re-book button
         const msg = document.createElement("p");
-        msg.style.cssText = "color:#c0392b;padding:0.5rem 0;font-weight:600;";
+        msg.style.cssText = "color:#c0392b;padding:.5rem;font-weight:600;";
         msg.textContent = "❌ Appointment cancelled.";
         receipt.appendChild(msg);
 
         const reBook = document.createElement("a");
         reBook.href = "login.html";
         reBook.className = "action-btn";
-        reBook.style.cssText = "display:inline-flex;margin-top:0.8rem;text-decoration:none;";
+        reBook.style.cssText = "display:inline-flex;margin-top:.8rem;text-decoration:none;";
         reBook.innerHTML = "<i class='ri-calendar-line'></i> Book a New Appointment";
         receipt.appendChild(reBook);
 
+        // Update history
+        const history = JSON.parse(localStorage.getItem("appointmentHistory") || "[]");
+        if (history.length > 0 && history[0].status === "Confirmed ✅") {
+            history[0].status = "Cancelled ❌";
+            localStorage.setItem("appointmentHistory", JSON.stringify(history));
+        }
         localStorage.removeItem("patientData");
         this.disabled = true;
         document.getElementById("printBtn").disabled = true;
-
-        window.alert("Your appointment has been cancelled. You can book a new one anytime.");
-        renderHistory(); // refresh history panel
+        document.getElementById('quickStats').innerHTML = '';
+        window.alert("Appointment cancelled. You can book a new one anytime.");
+        renderHistory();
     });
 
     document.getElementById("printBtn").addEventListener("click", () => window.print());
 
+    // Share button
+    document.getElementById("shareBtn").addEventListener("click", () => {
+        if (navigator.share && data) {
+            navigator.share({
+                title: 'MedicalCare Appointment',
+                text: `Appointment confirmed for ${data.name} with ${data.doctor}`
+            }).catch(() => {});
+        } else {
+            showToast('Copy the appointment details above to share!', 'success');
+        }
+    });
 
-    // ── 6. LIVE CLOCK — setInterval ──────────────────────────────
+    // ── 9. LIVE CLOCK — setInterval ──────────────────────────────
     function updateClock() {
         const now  = new Date();
-        const [hrs, mins, secs] = now.toTimeString().split(":"); // Array destructuring
-        document.getElementById("liveClock").textContent =
-            `${hrs}:${mins}:${secs.slice(0,2)}`;
+        const [hrs, mins, secs] = now.toTimeString().split(":");  // array destructuring
+        document.getElementById("liveClock").textContent = `${hrs}:${mins}:${secs.slice(0,2)}`;
+        document.getElementById("liveDate").textContent  =
+            now.toLocaleDateString('en-IN', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
     }
     updateClock();
     setInterval(updateClock, 1000);
 
-
-    // ── 7. WINDOW.NAVIGATOR ──────────────────────────────────────
+    // ── 10. NAVIGATOR INFO ───────────────────────────────────────
     const navInfo = {
         Browser:   navigator.appCodeName,
         Platform:  navigator.platform,
         Language:  navigator.language,
-        "Online":  navigator.onLine ? "Yes" : "No",
-        Cookies:   navigator.cookieEnabled ? "Enabled" : "Disabled"
+        Online:    navigator.onLine ? "✅ Yes" : "❌ No",
+        Cookies:   navigator.cookieEnabled ? "Enabled" : "Disabled",
+        "Screen":  `${screen.width}×${screen.height}`
     };
-
     const browserEl = document.getElementById("browserInfo");
-    for (const [key, val] of Object.entries(navInfo)) {  // for...of + destructuring
+    for (const [key, val] of Object.entries(navInfo)) {  // for...of
         const item = document.createElement("div");
         item.className = "browser-item";
         item.innerHTML = `<span class="rkey">${key}</span><span class="rval">${val}</span>`;
         browserEl.appendChild(item);
     }
 
-
-    // ── 8. PROMISE — async server confirmation ────────────────────
+    // ── 11. PROMISE ──────────────────────────────────────────────
     function confirmBookingAsync(patientName) {
         return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                patientName
-                    ? resolve("Server: appointment confirmed for " + patientName)
-                    : reject(new Error("No patient name"));
-            }, 600);
+            setTimeout(() => patientName
+                ? resolve("Server: appointment confirmed for " + patientName)
+                : reject(new Error("No patient name")), 600);
         });
     }
-
     if (data) {
         confirmBookingAsync(data.name)
             .then(msg  => console.log("✅ Promise resolved:", msg))
             .catch(err => console.error("❌ Promise rejected:", err));
     }
 
-
-    // ── 9. DEEP vs SHALLOW COPY ───────────────────────────────────
+    // ── 12. DEEP vs SHALLOW COPY ─────────────────────────────────
     if (data) {
-        const shallow = Object.assign({}, data);  // shallow — top-level copy only
-        const deep    = JSON.parse(JSON.stringify(data));  // deep — fully independent
-
-        deep.name = "[Deep Copy Modified]";
-        console.log("Original name:", data.name);   // unchanged
-        console.log("Deep copy:", deep.name);        // changed
-        console.log("Shallow copy:", shallow);
+        const shallow = Object.assign({}, data);           // shallow copy
+        const deep    = JSON.parse(JSON.stringify(data));  // deep copy
+        deep.name     = "[Deep Copy Modified]";
+        console.log("Original:", data.name, "| Deep:", deep.name, "| Shallow:", shallow.name);
     }
 
-
-    // ── 10. RECURSIVE FUNCTION ────────────────────────────────────
+    // ── 13. RECURSIVE COUNTDOWN ──────────────────────────────────
     function countdown(n) {
         if (n <= 0) { console.log("🔔 Appointment reminder sent!"); return; }
         console.log("Reminder in " + n + "...");
-        countdown(n - 1);   // recursive call
+        countdown(n - 1);
     }
     countdown(3);
 
-
-    // ── 11. NULL & UNDEFINED ─────────────────────────────────────
-    let userToken  = null;       // null: intentionally empty
-    let sessionAge = undefined;  // undefined: not yet set
-    console.log("token is null?",      userToken  === null);       // true
-    console.log("age is undefined?",   sessionAge === undefined);  // true
-
-
-    // ── 12. WHILE — retry loading data ───────────────────────────
-    let retries = 0;
-    let loaded  = false;
+    // ── 14. WHILE — retry loading ────────────────────────────────
+    let retries = 0, loaded = false;
     while (retries < 3 && !loaded) {
-        const check = localStorage.getItem("patientData");
-        if (check) { loaded = true; console.log("Data loaded on attempt", retries + 1); }
+        if (localStorage.getItem("patientData")) { loaded = true; }
         retries++;
     }
-    if (!loaded) console.warn("Data not found after retries.");
+    console.log(loaded ? `Data loaded on attempt ${retries}` : "Data not found after retries.");
 
-
-    // ── 13. DO...WHILE — build time slots ────────────────────────
+    // ── 15. DO...WHILE — time slots ──────────────────────────────
     const timeSlots = [];
     let hour = 8;
-    do {
-        timeSlots.push(hour + ":00");
-        hour++;
-    } while (hour <= 17);
-    console.log("Available time slots:", timeSlots);
+    do { timeSlots.push(hour + ":00"); hour++; } while (hour <= 17);
+    console.log("Time slots:", timeSlots);
 
+    // ── 16. NULL & UNDEFINED ─────────────────────────────────────
+    let userToken  = null;       // intentionally empty
+    let sessionAge = undefined;  // not yet set
+    console.log("token is null?", userToken === null, "| age is undefined?", sessionAge === undefined);
 
-    // ── 14. NAVIGATION ───────────────────────────────────────────
+    // ── 17. HOME NAVIGATION ─────────────────────────────────────
     function goHome() {
         const ok = window.confirm("Return to the home page?");
         if (ok) window.location.href = "index.html";
     }
 
-
-    // ── 15. APPOINTMENT HISTORY ───────────────────────────────────
-    // Save current confirmed appointment to history
+    // ── 18. APPOINTMENT HISTORY ──────────────────────────────────
     if (data) {
         const history = JSON.parse(localStorage.getItem("appointmentHistory") || "[]");
-        // Only add if not already saved (avoid duplicates on refresh)
-        const alreadySaved = history.some(h => h.name === data.name && h.doctor === data.doctor && h.status === "Confirmed ✅");
+        const alreadySaved = history.some(h => h.name === data.name &&
+                                               h.doctor === data.doctor &&
+                                               h.status === "Confirmed ✅");
         if (!alreadySaved) {
             history.unshift({ ...data, status: "Confirmed ✅", date: new Date().toLocaleString() });
             localStorage.setItem("appointmentHistory", JSON.stringify(history));
@@ -430,47 +659,55 @@
     }
 
     function renderHistory() {
-        const histEl = document.getElementById("historyList");
+        const histEl  = document.getElementById("historyList");
         const history = JSON.parse(localStorage.getItem("appointmentHistory") || "[]");
-
         if (history.length === 0) {
-            histEl.innerHTML = "<p style='color:#888;padding:0.5rem'>No past appointments yet.</p>";
+            histEl.innerHTML = "<p style='color:#888;padding:.5rem'>No past appointments yet.</p>";
             return;
         }
-
         histEl.innerHTML = history.map((appt, i) => `
-            <div class="history-item">
-                <div class="history-top">
+            <div class="hist-item">
+                <div class="history-top" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px;">
                     <span class="history-num">#${history.length - i}</span>
                     <span class="history-name">${appt.name}</span>
-                    <span class="history-date">${appt.date}</span>
+                    <span class="history-date" style="font-size:.78rem;color:#888;">${appt.date}</span>
                     <span class="history-status ${appt.status.includes('Confirmed') ? 'h-confirmed' : 'h-cancelled'}">${appt.status}</span>
                 </div>
-                <div class="history-details">
+                <div class="history-details" style="display:flex;gap:16px;flex-wrap:wrap;font-size:.82rem;color:#555;">
                     <span><i class="ri-stethoscope-line"></i> ${appt.doctor}</span>
                     <span><i class="ri-virus-line"></i> ${appt.disease}</span>
-                    <span><i class="ri-time-line"></i> ${appt.time || "Not specified"}</span>
+                    <span><i class="ri-time-line"></i> ${appt.time || 'Not specified'}</span>
                 </div>
-            </div>
-        `).join("");
+            </div>`).join("");
     }
-
     renderHistory();
 
-    document.getElementById("clearHistoryBtn").addEventListener("click", function () {
-        const ok = window.confirm("Clear all appointment history?");
-        if (!ok) return;
+    document.getElementById("clearHistoryBtn").addEventListener("click", function() {
+        if (!window.confirm("Clear all appointment history?")) return;
         localStorage.removeItem("appointmentHistory");
         renderHistory();
     });
 
-    </script>
+    // ── 19. TOAST HELPER ─────────────────────────────────────────
+    function showToast(message, type = "success") {
+        const toast = document.createElement("div");
+        toast.style.cssText = `
+            position:fixed;top:80px;left:50%;transform:translateX(-50%);
+            background:${type === "success" ? "#0a4ba8" : "#c0392b"};
+            color:white;padding:12px 24px;border-radius:10px;
+            font-size:.9rem;font-weight:600;z-index:9999;
+            box-shadow:0 6px 24px rgba(0,0,0,.25);
+            animation:fadeIn .3s ease;
+        `;
+        toast.textContent = (type === "success" ? "✅ " : "❌ ") + message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2800);
+    }
 
-    <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/919876543210?text=Hello,%20I%20need%20more%20information!"
-       target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
-        <i class="ri-whatsapp-fill"></i>
-    </a>
-    <script src="script.js"></script>
+    const style = document.createElement('style');
+    style.textContent = `@keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}`;
+    document.head.appendChild(style);
+    </script>
 </body>
 </html>
+
