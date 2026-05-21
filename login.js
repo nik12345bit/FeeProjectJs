@@ -1,5 +1,5 @@
 // ============================================================
-// LOGIN.JS — Syllabus topics:
+// LOGIN.JS — Syllabus topics covered:
 //   var · let · const · String/Number/Boolean · null/undefined
 //   Symbol · BigInt · console.log/warn/error/table
 //   if/else · for...in · for...of · while · do...while
@@ -8,75 +8,77 @@
 //   rest params · call by value · closure · try/catch
 //   JSON.stringify · Object destructuring · Array destructuring
 //   DOM: createElement/appendChild/remove · addEventListener
-//   form validation · setTimeout (BOM) · window.alert/prompt
+//   form validation · setTimeout (BOM) · window.alert
 // ============================================================
 
-// ── Data Types ──────────────────────────────────────────────
+// ── 1. DATA TYPES ────────────────────────────────────────────
 var submitAttempts = 0;                          // var (function-scoped)
-const SITE_NAME = "MedicalCare";                 // const (immutable)
-let isFormReady = false;                         // let (mutable)
+const SITE_NAME    = "MedicalCare";              // const (immutable)
+let isFormReady    = false;                      // let (mutable)
 
-const patientSymbol = Symbol("patientID");       // Symbol — unique identifier
-const MAX_PATIENTS = BigInt(9999999999999);      // BigInt — large number
+const patientSymbol = Symbol("patientID");       // Symbol
+const MAX_PATIENTS  = BigInt(9999999999999);     // BigInt
 console.log("Symbol:", patientSymbol.toString());
 console.log("BigInt max patients:", MAX_PATIENTS);
 
-// ── Closure: private session counter ────────────────────────
+// Boolean type
+const isProduction = true;
+const isDebug      = false;
+console.log("Production mode:", isProduction, "| Debug:", isDebug);
+
+// ── 2. CLOSURE: private session counter ──────────────────────
 function makeCounter() {
-    let count = 0;
+    let count = 0;                              // private variable via closure
     return function () { count++; return count; };
 }
-const sessionBookingCount = makeCounter();
+const sessionBookingCount = makeCounter();      // closure in action
 
-// ── Default parameter ────────────────────────────────────────
+// ── 3. DEFAULT PARAMETER ─────────────────────────────────────
 function greetUser(name = "Patient") {
-    console.log("Welcome to " + SITE_NAME + ", " + name + "!");
+    console.log(`Welcome to ${SITE_NAME}, ${name}!`);
 }
 
-// ── Rest parameters (...args) ────────────────────────────────
+// ── 4. REST PARAMETERS ───────────────────────────────────────
 function logFields(...fields) {
     console.log("Fields received:", fields.length);
-    // while loop: process each field
+    // while loop: iterate each field
     let i = 0;
     while (i < fields.length) {
-        if (!fields[i]) {
-            console.warn("Empty field at index " + i);  // console.warn
-        }
+        if (!fields[i]) console.warn("Empty field at index " + i); // console.warn
         i++;
     }
 }
 
-// ── Form validation ──────────────────────────────────────────
+// ── 5. FORM VALIDATION ───────────────────────────────────────
 function validateForm(patient) {
-    console.table(patient);                      // console.table
+    console.table(patient);                     // console.table
 
-    // for...in: check each key
+    // for...in: check every key
     for (let key in patient) {
         if (!patient[key]) {
-            console.error("Missing: " + key);   // console.error
+            console.error("Missing:", key);     // console.error
             return false;
         }
     }
 
-    // do...while: keep checking age until valid format
+    // do...while: validate age
     let ageCheck = Number(patient.age);
     do {
         if (isNaN(ageCheck) || ageCheck <= 0 || ageCheck > 120) {
-            console.warn("Invalid age: " + ageCheck);
+            console.warn("Invalid age:", ageCheck);
             return false;
         }
-        break;   // break: exit loop once valid
+        break;                                  // break: exit once valid
     } while (false);
 
-    // Phone validation with continue (skip non-digit chars, count digits)
-    const phoneDigits = patient.phone.split("");
+    // for...of with continue: count phone digits, skip non-digits
     let digitCount = 0;
-    for (const ch of phoneDigits) {
-        if (isNaN(ch) || ch === " ") continue;  // continue: skip non-digits
+    for (const ch of patient.phone.split("")) {
+        if (isNaN(ch) || ch === " ") continue; // continue: skip non-digits
         digitCount++;
     }
-    if (digitCount < 10) {
-        console.error("Phone number too short:", digitCount, "digits");
+    if (digitCount < 7) {
+        console.error("Phone too short:", digitCount, "digits");
         return false;
     }
 
@@ -84,57 +86,56 @@ function validateForm(patient) {
     return true;
 }
 
-// ── Pre-fill doctor if coming from doctor.html ───────────────
+// ── 6. DOM READY ─────────────────────────────────────────────
 window.addEventListener("DOMContentLoaded", function () {
 
-    // window.prompt: ask preferred appointment time (BOM)
-    const prefTime = window.prompt(
-        "Welcome! What is your preferred appointment time?\n(e.g. 10:00 AM, 2:00 PM)",
-        "10:00 AM"
-    );
-
-    // null check on prompt result (user pressed Cancel → null)
-    if (prefTime !== null && prefTime.trim() !== "") {
-        console.log("Preferred time:", prefTime);
-        // Store for dashboard use
-        localStorage.setItem("preferredTime", prefTime);
-    } else {
-        console.warn("No preferred time entered.");
-        localStorage.setItem("preferredTime", "Not specified");
+    // Store a default preferred time (no intrusive prompt for presentation)
+    if (!localStorage.getItem("preferredTime")) {
+        localStorage.setItem("preferredTime", "10:00 AM");
     }
 
     // Pre-fill doctor from URL param (doctor.html → login.html)
     const urlParams = new URLSearchParams(window.location.search);
     const preDoctor = urlParams.get("doctor");
+
     if (preDoctor) {
         const doctorSelect = document.getElementById("doctor");
         let matched = false;
-        // for...of: loop options to find a match
+
+        // for...of: loop through all options
         for (const option of doctorSelect.options) {
-            // Match by checking if the option value contains the doctor name
-            if (option.value === preDoctor || option.text.startsWith(preDoctor.split(" - ")[0])) {
+            if (option.value === preDoctor ||
+                option.text.startsWith(preDoctor.split(" - ")[0])) {
                 option.selected = true;
                 matched = true;
-                break;   // break: stop once found
+                break;                          // break: stop once matched
             }
         }
-        if (!matched) console.warn("Doctor not found in dropdown:", preDoctor);
-        else {
-            // Highlight the pre-filled field
-            doctorSelect.closest(".input-box").style.borderColor = "#27ae60";
-            doctorSelect.closest(".input-box").style.background = "#f0fff4";
+
+        // Ternary: conditional feedback
+        matched
+            ? console.log("Doctor pre-selected:", preDoctor)
+            : console.warn("Doctor not found:", preDoctor);
+
+        if (matched) {
+            const box = doctorSelect.closest(".input-box");
+            if (box) {
+                box.style.borderColor = "#27ae60";
+                box.style.background  = "#f0fff4";
+            }
         }
     }
 
     isFormReady = true;
-    console.log("Form ready:", isFormReady);
+    console.log("Form ready:", isFormReady, "| undefined check:", typeof isFormReady !== "undefined");
 });
 
-// ── Main submit ──────────────────────────────────────────────
+// ── 7. FORM SUBMIT ───────────────────────────────────────────
 document.getElementById("loginForm").addEventListener("submit", function (e) {
     e.preventDefault();
-    submitAttempts++;
+    submitAttempts++;                           // increment attempt count
 
+    // Object literal
     const patient = {
         name:    document.getElementById("name").value.trim(),
         age:     document.getElementById("age").value,
@@ -142,47 +143,59 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
         phone:   document.getElementById("phone").value.trim(),
         disease: document.getElementById("disease").value.trim(),
         doctor:  document.getElementById("doctor").value,
-        time:    localStorage.getItem("preferredTime") || "Not specified"
+        time:    localStorage.getItem("preferredTime") || "10:00 AM"
     };
 
     // Object destructuring
     const { name, doctor } = patient;
-    greetUser(name);
+    greetUser(name);                            // default param function
 
-    // Rest params demo
+    // Rest params — spread object values
     logFields(...Object.values(patient));
+
+    // Logical AND: both must be truthy
+    const canSubmit = isFormReady && submitAttempts > 0;
+    console.log("Can submit:", canSubmit);
 
     if (!validateForm(patient)) {
         showToast("Please fill all fields correctly.", "error");
         return;
     }
 
-    // Sanitize inputs before saving
-    function sanitize(str) { return String(str).replace(/[<>"']/g, ""); }
+    // Sanitize: arrow function
+    const sanitize = (str) => String(str).replace(/[<>"']/g, "");
     Object.keys(patient).forEach(k => { patient[k] = sanitize(patient[k]); });
 
-    // Disable button to prevent double-submit
+    // Disable button (prevent double-submit)
     const bookBtn = document.getElementById("bookBtn");
     if (bookBtn) {
         bookBtn.disabled = true;
         bookBtn.innerHTML = '<i class="ri-loader-4-line"></i> Booking...';
     }
 
-    // Array destructuring: split doctor name and specialty
+    // Array destructuring: split doctor string
     const [docTitle, docName, , docSpecialty] = doctor.split(" ");
-    console.log("Booking with:", docTitle, docName, "| Specialty:", docSpecialty);
+    console.log("Booking:", docTitle, docName, "| Specialty:", docSpecialty);
+
+    // null & undefined demo
+    let userToken  = null;        // intentionally null
+    let sessionAge = undefined;   // not yet assigned
+    console.log("token null?", userToken === null, "| age undefined?", sessionAge === undefined);
 
     try {
+        // JSON.stringify to save
         localStorage.setItem("patientData", JSON.stringify(patient));
 
-        // Shallow copy demo
-        const patientCopy = Object.assign({}, patient);
-        patientCopy.status = "Confirmed";
-        console.log("Saved copy:", patientCopy);
+        // Shallow copy (Object.assign)
+        const patientCopy    = Object.assign({}, patient);
+        patientCopy.status   = "Confirmed";
+        console.log("Shallow copy status:", patientCopy.status);
+        console.log("Original unchanged:", patient.status);  // undefined
 
-        const num = sessionBookingCount();
-        showToast("Appointment #" + num + " booked for " + name + "! Redirecting...", "success");
+        const bookingNum = sessionBookingCount();             // closure counter
+        showToast(`Appointment #${bookingNum} booked for ${name}! Redirecting…`, "success");
 
+        // setTimeout (BOM): redirect after delay
         setTimeout(() => { window.location.href = "dashboard.html"; }, 1800);
 
     } catch (err) {
@@ -195,23 +208,31 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
     }
 });
 
-// ── Toast helper (createElement + remove) ───────────────────
+// ── 8. TOAST HELPER — createElement + appendChild + remove ───
 function showToast(message, type = "success") {
-    const toast = document.createElement("div");
+    const toast = document.createElement("div");   // createElement
     toast.textContent = (type === "success" ? "✅ " : "❌ ") + message;
     toast.style.cssText = `
         position:fixed;top:24px;left:50%;transform:translateX(-50%);
         background:${type === "success" ? "#0a4ba8" : "#c0392b"};
-        color:white;padding:14px 28px;border-radius:10px;
-        font-size:.95rem;font-weight:600;
-        box-shadow:0 4px 20px rgba(0,0,0,0.25);
+        color:white;padding:14px 28px;border-radius:12px;
+        font-size:.93rem;font-weight:600;
+        box-shadow:0 6px 28px rgba(0,0,0,.25);
         z-index:9999;max-width:90%;text-align:center;
+        animation:toastIn .3s ease;
     `;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3500);   // .remove() — delete node
+    document.body.appendChild(toast);              // appendChild
+    setTimeout(() => toast.remove(), 3500);         // .remove() — delete node
+
+    if (!document.getElementById('toast-style')) {
+        const s = document.createElement('style');
+        s.id = 'toast-style';
+        s.textContent = `@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}`;
+        document.head.appendChild(s);
+    }
 }
 
-// ── Scroll into view on click ────────────────────────────────
+// ── 9. SMOOTH SCROLL on input click ─────────────────────────
 const inputs = document.querySelectorAll(".input-box");
 for (const input of inputs) {
     input.addEventListener("click", () => {
