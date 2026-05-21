@@ -1,121 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Book an appointment with MedicalCare's certified doctors online.">
     <title>Book Appointment — MedicalCare</title>
-    <link rel="shortcut icon" href="assets/favicon.png" type="image/x-icon">
-    <!-- Remix Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
-    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="login.css">
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(135deg, #0a4ba8, #1c8dfc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            padding: 1rem;
+        }
+
+        .login-container {
+            width: 980px;
+            max-width: 100%;
+            min-height: 600px;
+            display: flex;
+            border-radius: 24px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+            animation: fadeIn 0.7s ease;
+        }
+
+        /* ── LEFT ── */
+        .login-left {
+            width: 48%;
+            padding: 48px 44px;
+            background: linear-gradient(160deg, #0a3580, #1c8dfc);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .login-left::before {
+            content: '';
+            position: absolute;
+            width: 320px; height: 320px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.06);
+            bottom: -80px; right: -80px;
+        }
+        .login-left::after {
+            content: '';
+            position: absolute;
+            width: 160px; height: 160px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.08);
+            top: 20px; right: 30px;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: .5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 2.5rem;
+            position: relative; z-index:1;
+        }
+
+        .login-left h2 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: .5rem;
+            position: relative; z-index:1;
+        }
+
+        .motto {
+            font-size: 1rem;
+            font-weight: 600;
+            color: rgba(255,255,255,.9);
+            margin-bottom: 1rem;
+            position: relative; z-index:1;
+        }
+
+        .desc {
+            font-size: .88rem;
+            color: rgba(255,255,255,.75);
+            line-height: 1.7;
+            position: relative; z-index:1;
+            flex: 1;
+        }
+
+        /* Floating info cards */
+        .info-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 2rem;
+            position: relative; z-index:1;
+        }
+        .info-card {
+            background: rgba(255,255,255,.12);
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            font-size: .84rem;
+            font-weight: 600;
+            backdrop-filter: blur(6px);
+        }
+        .info-card i { font-size: 1.3rem; opacity: .9; }
+
+        /* ── RIGHT ── */
+        .login-right {
+            width: 52%;
+            padding: 48px 44px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: #fafbff;
+            overflow-y: auto;
+        }
+
+        .form-title {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #0a4ba8;
+            margin-bottom: .4rem;
+        }
+        .form-subtitle {
+            font-size: .88rem;
+            color: #888;
+            margin-bottom: 1.8rem;
+        }
+
+        .login-form { display: flex; flex-direction: column; gap: 14px; }
+
+        .input-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 13px 16px;
+            border-radius: 12px;
+            border: 2px solid #e8ecf5;
+            transition: .25s;
+            box-shadow: 0 2px 8px rgba(10,75,168,.05);
+        }
+        .input-box:focus-within {
+            border-color: #1c8dfc;
+            box-shadow: 0 0 0 4px rgba(28,141,252,.1);
+            background: white;
+        }
+        .input-box i {
+            color: #0a4ba8;
+            margin-right: 12px;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .input-box input, .input-box select {
+            border: none; outline: none;
+            width: 100%; background: transparent;
+            font-size: .9rem; font-family: inherit;
+            color: #1a2a44;
+        }
+        .input-box select { cursor: pointer; }
+
+        .input-label {
+            position: absolute;
+            top: -9px; left: 14px;
+            background: #fafbff;
+            font-size: .72rem; font-weight: 700;
+            color: #0a4ba8; padding: 0 4px;
+            letter-spacing: .3px;
+            opacity: 0; transition: .2s;
+        }
+        .input-box:focus-within .input-label { opacity: 1; }
+
+        .login-btn {
+            margin-top: 6px;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #0a4ba8, #1c8dfc);
+            color: white;
+            font-weight: 700;
+            font-size: .95rem;
+            cursor: pointer;
+            transition: .3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 6px 20px rgba(10,75,168,.3);
+            font-family: inherit;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(10,75,168,.4);
+        }
+        .login-btn:active { transform: scale(.98); }
+
+        .form-note {
+            text-align: center;
+            font-size: .78rem;
+            color: #aaa;
+            margin-top: 1rem;
+        }
+        .form-note a { color: #0a4ba8; font-weight: 600; }
+
+        /* Progress bar */
+        .progress-wrap {
+            margin-bottom: 1.2rem;
+        }
+        .progress-label {
+            display: flex; justify-content: space-between;
+            font-size: .75rem; color: #888; margin-bottom: 6px; font-weight: 600;
+        }
+        .progress-bar {
+            height: 5px; background: #e8ecf5; border-radius: 10px; overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%; background: linear-gradient(90deg,#0a4ba8,#1c8dfc);
+            border-radius: 10px; width: 0; transition: width .4s ease;
+        }
+
+        @media (max-width: 768px) {
+            .login-left { display: none; }
+            .login-right { width: 100%; padding: 40px 28px; }
+            .login-container { min-height: auto; }
+        }
+    </style>
 </head>
-
 <body>
+<div class="login-container">
 
-    <div class="login-container">
-
-        <!-- LEFT SIDE (BLUE DESIGN) -->
-        <div class="login-left">
-            <a href="index.html" class="login-back-link">
-                <i class="ri-arrow-left-line"></i> Back to Home
-            </a>
-            <h1 class="logo">
-                <i class="ri-stethoscope-line"></i> MedicalCare
-            </h1>
-
-            <h2>WELCOME</h2>
-            <p class="motto">"Your Health, Our Priority"</p>
-
-            <p class="desc">
-                We provide trusted healthcare services with expert doctors and modern facilities.
-                Book appointments easily and get treated with care.
-            </p>
-
-            <!-- Design Circles -->
-            <div class="circle big"></div>
-            <div class="circle small"></div>
+    <!-- LEFT -->
+    <div class="login-left">
+        <a href="index.html" class="login-back-link" style="position:relative;z-index:1;">
+            <i class="ri-arrow-left-line"></i> Back to Home
+        </a>
+        <h1 class="logo"><i class="ri-stethoscope-line"></i> MedicalCare</h1>
+        <h2>WELCOME</h2>
+        <p class="motto">"Your Health, Our Priority"</p>
+        <p class="desc">
+            We provide trusted healthcare services with expert doctors and modern facilities.
+            Book your appointment in under 60 seconds — no paperwork needed.
+        </p>
+        <div class="info-cards">
+            <div class="info-card"><i class="ri-shield-check-fill"></i> Board-Certified Doctors</div>
+            <div class="info-card"><i class="ri-time-fill"></i> Instant Confirmation</div>
+            <div class="info-card"><i class="ri-lock-fill"></i> 100% Secure &amp; Private</div>
         </div>
-
-        <!-- RIGHT SIDE (FORM) -->
-        <div class="login-right">
-            <h2 class="form-title">Book Appointment</h2>
-
-            <form class="login-form" id="loginForm" novalidate>
-
-                <div class="input-box">
-                    <i class="ri-user-line"></i>
-                    <input type="text" id="name" placeholder="Full Name" required autocomplete="name">
-                </div>
-
-                <div class="input-box">
-                    <i class="ri-calendar-line"></i>
-                    <input type="number" id="age" placeholder="Age" min="1" max="120" required>
-                </div>
-
-                <div class="input-box">
-                    <i class="ri-user-3-line"></i>
-                    <select id="gender" required>
-                        <option value="">Select Gender</option>
-                        <option>Male</option>
-                        <option>Female</option>
-                        <option>Other</option>
-                    </select>
-                </div>
-
-                <div class="input-box">
-                    <i class="ri-phone-line"></i>
-                    <input type="tel" id="phone" placeholder="Mobile Number" required autocomplete="tel">
-                </div>
-
-                <div class="input-box">
-                    <i class="ri-virus-line"></i>
-                    <input type="text" id="disease" placeholder="Disease / Issue" required>
-                </div>
-
-                <div class="input-box">
-                    <i class="ri-hospital-line"></i>
-                    <select id="doctor" required>
-                        <option value="">Choose Doctor</option>
-                        <option value="Dr. Myla Harts - Bones">Dr. Myla Harts — Bones</option>
-                        <option value="Dr. John Smith - Heart">Dr. John Smith — Heart</option>
-                        <option value="Dr. Sarah Lee - Child">Dr. Sarah Lee — Child</option>
-                        <option value="Dr. Michael Brown - Neuro">Dr. Michael Brown — Neuro</option>
-                        <option value="Dr. Emily Davis - Skin">Dr. Emily Davis — Skin</option>
-                        <option value="Dr. David Wilson - General">Dr. David Wilson — General</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="login-btn" id="bookBtn">
-                    Book Appointment <i class="ri-arrow-right-line"></i>
-                </button>
-
-            </form>
-        </div>
-
     </div>
 
-    <script src="login.js"></script>
-    <script>
-        // Pre-select doctor from URL query param (e.g. doctor.html links)
-        (function() {
-            const params = new URLSearchParams(window.location.search);
-            const docParam = params.get('doctor');
-            if (docParam) {
-                const sel = document.getElementById('doctor');
-                for (let i = 0; i < sel.options.length; i++) {
-                    if (sel.options[i].value.toLowerCase().includes(
-                            docParam.split(' - ')[0].toLowerCase().replace('dr. ', '')
-                        )) {
-                        sel.selectedIndex = i;
-                        break;
-                    }
-                }
-            }
-        })();
-    </script>
-</body>
+    <!-- RIGHT -->
+    <div class="login-right">
+        <h2 class="form-title">Book Appointment</h2>
+        <p class="form-subtitle">Fill in your details — it only takes a minute.</p>
 
+        <div class="progress-wrap">
+            <div class="progress-label"><span>Form Completion</span><span id="progress-pct">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+
+        <form class="login-form" id="loginForm" novalidate>
+            <div class="input-box">
+                <span class="input-label">Full Name</span>
+                <i class="ri-user-line"></i>
+                <input type="text" id="name" placeholder="Full Name" required autocomplete="name">
+            </div>
+            <div class="input-box">
+                <span class="input-label">Age</span>
+                <i class="ri-calendar-line"></i>
+                <input type="number" id="age" placeholder="Age" min="1" max="120" required>
+            </div>
+            <div class="input-box">
+                <span class="input-label">Gender</span>
+                <i class="ri-user-3-line"></i>
+                <select id="gender" required>
+                    <option value="">Select Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div class="input-box">
+                <span class="input-label">Mobile Number</span>
+                <i class="ri-phone-line"></i>
+                <input type="tel" id="phone" placeholder="Mobile Number" required autocomplete="tel">
+            </div>
+            <div class="input-box">
+                <span class="input-label">Disease / Issue</span>
+                <i class="ri-virus-line"></i>
+                <input type="text" id="disease" placeholder="Disease / Issue" required>
+            </div>
+            <div class="input-box">
+                <span class="input-label">Choose Doctor</span>
+                <i class="ri-hospital-line"></i>
+                <select id="doctor" required>
+                    <option value="">Choose Doctor</option>
+                    <option value="Dr. Myla Harts - Bones">Dr. Myla Harts — Bones</option>
+                    <option value="Dr. John Smith - Heart">Dr. John Smith — Heart</option>
+                    <option value="Dr. Sarah Lee - Child">Dr. Sarah Lee — Child</option>
+                    <option value="Dr. Michael Brown - Neuro">Dr. Michael Brown — Neuro</option>
+                    <option value="Dr. Emily Davis - Skin">Dr. Emily Davis — Skin</option>
+                    <option value="Dr. David Wilson - General">Dr. David Wilson — General</option>
+                </select>
+            </div>
+            <button type="submit" class="login-btn" id="bookBtn">
+                Book Appointment <i class="ri-arrow-right-line"></i>
+            </button>
+        </form>
+
+        <p class="form-note">
+            Want to see all doctors first? <a href="doctor.html">View Doctors</a>
+        </p>
+    </div>
+</div>
+
+<script src="login.js"></script>
+<script>
+    // Progress bar on form fill
+    const fields = ['name','age','gender','phone','disease','doctor'];
+    const fillEl = document.getElementById('progress-fill');
+    const pctEl  = document.getElementById('progress-pct');
+
+    function updateProgress() {
+        const filled = fields.filter(id => document.getElementById(id)?.value?.trim()).length;
+        const pct = Math.round((filled / fields.length) * 100);
+        fillEl.style.width = pct + '%';
+        pctEl.textContent  = pct + '%';
+    }
+
+    fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateProgress);
+        if (el) el.addEventListener('change', updateProgress);
+    });
+
+    // Pre-select doctor from URL param
+    (function() {
+        const params    = new URLSearchParams(window.location.search);
+        const docParam  = params.get('doctor');
+        if (!docParam) return;
+        const sel = document.getElementById('doctor');
+        for (let i = 0; i < sel.options.length; i++) {
+            if (sel.options[i].value.toLowerCase().includes(
+                docParam.split(' - ')[0].toLowerCase().replace('dr. ', '')
+            )) {
+                sel.selectedIndex = i;
+                sel.closest('.input-box').style.borderColor = '#27ae60';
+                updateProgress();
+                break;
+            }
+        }
+    })();
+</script>
+</body>
 </html>
+
