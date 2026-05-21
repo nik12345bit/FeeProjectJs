@@ -1,624 +1,767 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="MedicalCare — Get quick, certified medical services from expert doctors. Book appointments, vaccine delivery, and health consultations online.">
-    <meta name="keywords" content="medical care, doctor appointment, vaccine delivery, health consultation, certified doctors">
-
     <title>MedicalCare — Trusted Medical Services</title>
-
-    <!--=============== FAVICON ===============-->
-    <link rel="shortcut icon" href="assets/favicon.png" type="image/x-icon">
-
-    <!--=============== REMIXICONS ===============-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
-
-    <!--=============== SWIPER CSS ===============-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
-
-    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* ── ENHANCED HERO PARTICLES ── */
+        #particles-canvas {
+            position: absolute; inset: 0; pointer-events: none; z-index: 0;
+        }
+        /* ── TYPED CURSOR ── */
+        .typed-cursor { display: inline-block; width: 3px; background: #1c8dfc; animation: blink .7s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
+        /* ── STATS COUNTER ── */
+        .stat-counter { font-variant-numeric: tabular-nums; }
+
+        /* ── HERO BADGE ── */
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(28,141,252,0.12); border: 1px solid rgba(28,141,252,0.3);
+            color: #1c8dfc; font-size: .82rem; font-weight: 700;
+            padding: 6px 14px; border-radius: 20px; margin-bottom: 1rem;
+            letter-spacing: .5px; text-transform: uppercase;
+        }
+        .hero-badge i { font-size: 1rem; }
+
+        /* ── PULSE DOT ── */
+        .pulse-dot {
+            width: 8px; height: 8px; background: #27ae60; border-radius: 50%;
+            display: inline-block; position: relative;
+        }
+        .pulse-dot::after {
+            content: ''; position: absolute; inset: -4px;
+            border: 2px solid #27ae60; border-radius: 50%;
+            animation: pulse-ring 1.5s infinite;
+        }
+        @keyframes pulse-ring { 0%{opacity:1;transform:scale(1)} 100%{opacity:0;transform:scale(2.5)} }
+
+        /* ── FLOATING TAGS ── */
+        .float-tag {
+            position: absolute; background: white; border-radius: 12px;
+            padding: 10px 16px; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 8px 30px rgba(10,75,168,.2); font-size: .82rem; font-weight: 600;
+            color: #1a2a44; animation: float-up 3s ease-in-out infinite;
+            white-space: nowrap; z-index: 5;
+        }
+        .float-tag i { color: #0a4ba8; font-size: 1.1rem; }
+        .float-tag:nth-child(2) { animation-delay: 1s; }
+        .float-tag:nth-child(3) { animation-delay: 2s; }
+        @keyframes float-up { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+        /* ── SECTION BADGE ── */
+        .section-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #eaf2ff; color: #0a4ba8;
+            font-size: .78rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; padding: 5px 14px; border-radius: 20px;
+            margin-bottom: .8rem;
+        }
+
+        /* ── FEATURE CARDS ── */
+        .features-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+            gap: 1.2rem; margin-top: 2rem;
+        }
+        .feature-card {
+            background: white; border-radius: 16px; padding: 1.5rem;
+            text-align: center; box-shadow: 0 4px 20px rgba(10,75,168,.07);
+            transition: all .3s; border: 1.5px solid transparent;
+            cursor: default;
+        }
+        .feature-card:hover {
+            border-color: #1c8dfc; transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(10,75,168,.15);
+        }
+        .feature-card .icon {
+            width: 56px; height: 56px; border-radius: 14px;
+            background: linear-gradient(135deg,#0a4ba8,#1c8dfc);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem; font-size: 1.5rem; color: white;
+        }
+        .feature-card h4 { font-size: .95rem; color: #1a2a44; margin-bottom: .4rem; }
+        .feature-card p { font-size: .8rem; color: #777; }
+
+        /* ── TESTIMONIAL ── */
+        .testimonials { padding: 5rem 0; background: linear-gradient(135deg,#0a4ba8,#1c8dfc); }
+        .testimonials .section__title { color: white !important; }
+        .testimonials .section__title span { color: rgba(255,255,255,.8) !important; background: transparent !important; }
+        .test-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .test-card {
+            background: rgba(255,255,255,.1); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,.2); border-radius: 16px; padding: 1.5rem;
+            color: white; transition: .3s;
+        }
+        .test-card:hover { background: rgba(255,255,255,.18); transform: translateY(-4px); }
+        .test-card .stars { color: #ffc107; font-size: 1rem; margin-bottom: .8rem; }
+        .test-card p { font-size: .88rem; line-height: 1.7; opacity: .9; }
+        .test-author { display: flex; align-items: center; gap: 10px; margin-top: 1.2rem; }
+        .test-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: rgba(255,255,255,.3); display: flex; align-items: center;
+            justify-content: center; font-weight: 700; font-size: .9rem;
+        }
+        .test-author strong { display: block; font-size: .88rem; }
+        .test-author span { font-size: .76rem; opacity: .75; }
+
+        /* ── PROGRESS BARS ── */
+        .skill-bar { margin-bottom: 1rem; }
+        .skill-label { display: flex; justify-content: space-between; font-size: .85rem; font-weight: 600; color: #1a2a44; margin-bottom: 6px; }
+        .skill-track { height: 8px; background: #e8ecf5; border-radius: 10px; overflow: hidden; }
+        .skill-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg,#0a4ba8,#1c8dfc); width: 0; transition: width 1.4s cubic-bezier(.4,0,.2,1); }
+
+        /* ── BACK TO TOP ── */
+        .scrollup { background: linear-gradient(135deg,#0a4ba8,#1c8dfc); color: white; }
+        .scrollup:hover { background: linear-gradient(135deg,#083d90,#1577d8); }
+
+        /* ── JS TOPIC BADGE (for presentation) ── */
+        .js-badge {
+            display: inline-flex; align-items: center; gap: 5px;
+            background: #fff3cd; color: #856404; border: 1px solid #ffc107;
+            font-size: .7rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+            font-family: monospace; letter-spacing: .3px;
+        }
+
+        /* ── NOTIFICATION TOAST ── */
+        #global-toast {
+            position: fixed; top: 80px; right: 20px; z-index: 9999;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+    </style>
 </head>
-
 <body>
 
-    <header class="header" id="header">
-        <nav class="nav container">
+<!-- HEADER -->
+<header class="header" id="header">
+    <nav class="nav container">
+        <a href="#" class="nav__logo">
+            <i class="ri-stethoscope-line"></i>MedicalCare
+        </a>
+        <div class="nav__menu" id="nav-menu">
+            <ul class="nav__list">
+                <li><a href="#home" class="nav__link active-link">Home</a></li>
+                <li><a href="#delivery" class="nav__link">Delivery</a></li>
+                <li><a href="#about" class="nav__link">About</a></li>
+                <li><a href="#prices" class="nav__link">Prices</a></li>
+                <li><a href="#contact" class="nav__link">Contact</a></li>
+                <li><a href="login.html" class="nav__link nav__login">
+                    <i class="ri-calendar-check-line"></i> Book Appointment
+                </a></li>
+            </ul>
+            <div class="nav__close" id="nav-close"><i class="ri-close-line"></i></div>
+        </div>
+        <div class="nav__buttons">
+            <i class="ri-moon-fill nav__theme" id="theme-button" title="Toggle dark mode"></i>
+            <div class="nav__toggle" id="nav-toggle"><i class="ri-menu-line"></i></div>
+        </div>
+    </nav>
+</header>
 
-            <!-- Logo -->
-            <a href="#" class="nav__logo">
-                <i class="ri-stethoscope-line"></i>MedicalCare
-            </a>
+<main class="main">
 
-            <!-- Navbar -->
-            <div class="nav__menu" id="nav-menu">
-
-                <ul class="nav__list">
-
-                    <li>
-                        <a href="#home" class="nav__link">Home</a>
-                    </li>
-
-                    <li>
-                        <a href="#delivery" class="nav__link">Delivery</a>
-                    </li>
-
-                    <li>
-                        <a href="#about" class="nav__link">About</a>
-                    </li>
-
-                    <li>
-                        <a href="#prices" class="nav__link">Prices</a>
-                    </li>
-
-                    <li>
-                        <a href="#contact" class="nav__link">Contact</a>
-                    </li>
-
-                    <li>
-                        <a href="login.html" class="nav__link nav__login">Book Appointment</a>
-                    </li>
-
-                </ul>
-
-                <!-- Close Button -->
-                <div class="nav__close" id="nav-close">
-                    <i class="ri-close-line"></i>
+    <!-- ======= HOME ======= -->
+    <section class="home section" id="home">
+        <canvas id="particles-canvas"></canvas>
+        <div class="home__container container grid">
+            <div class="home__data">
+                <div class="hero-badge">
+                    <span class="pulse-dot"></span> Trusted Since 2018
                 </div>
-
-            </div>
-
-            <!-- Buttons -->
-            <div class="nav__buttons">
-
-                <!-- Dark mode -->
-                <i class="ri-moon-fill nav__theme" id="theme-button"></i>
-
-                <!-- Menu toggle -->
-                <div class="nav__toggle" id="nav-toggle">
-                    <i class="ri-menu-line"></i>
-                </div>
-
-            </div>
-
-        </nav>
-    </header>
-
-
-    <!--==================== MAIN ====================-->
-    <main class="main">
-
-        <!--==================== HOME ====================-->
-        <section class="home section" id="home">
-            <div class="home__container container grid">
-                <div class="home__data">
-                    <h1 class="home__title">
-                        <span>Get Quick</span>
-                        <br> Medical Service
-                    </h1>
-
-                    <p class="home__description">
-                        Get your medical service from a certified
-                        doctor and health professional.
-                    </p>
+                <h1 class="home__title">
+                    <span id="typed-title">Get Quick</span><span class="typed-cursor"></span>
+                    <br> Medical Service
+                </h1>
+                <p class="home__description">
+                    Get your medical service from a certified doctor and
+                    health professional — available 24/7 for you and your family.
+                </p>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:1.5rem;">
                     <a href="#delivery" class="button">Get Started</a>
-                </div>
-
-                <div class="home__content grid">
-                    <div class="home__info">
-                        <div>
-                            <h2 class="home__name">Dr. Myla Harts</h2>
-                            <h3 class="home__profession">Bones Specialist</h3>
-
-                            <div class="home__icons">
-                                <div class="home__box">
-                                    <i class="ri-medicine-bottle-fill"></i>
-                                </div>
-
-                                <div class="home__box">
-                                    <i class="ri-24-hours-line"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <a href="#contact" class="home__button button-dark">
-                            <i class="ri-arrow-right-s-line"></i>
-                            Contact
-                        </a>
-
-                    </div>
-
-                    <div class="home__image">
-                        <img src="assets/home-img.png" alt="Doctor illustration" class="home__img" loading="lazy">
-                    </div>
-                </div>
-            </div>
-
-        </section>
-
-        <!--==================== DELIVERY ====================-->
-        <section class="delivery section" id="delivery">
-            <div class="delivery__container container grid">
-                <div class="delivery__data">
-                    <h2 class="section__title">
-                        <span>Vaccine Injections <br>
-                            Delivery Service</span>
-                    </h2>
-
-                    <p class="delivery__description">
-                        We provide door-to-door vaccine and injection delivery
-                        services, available to all segments throughout the city.
-                    </p>
-                    <div class="delivery__info">
-                        <div>
-                            <div class="delivery__icon">
-                                <i class="ri-home-4-fill"></i>
-                            </div>
-                            <h3 class="delivery__subtitle">Home Service</h3>
-                            <p>Fast home vaccination service.</p>
-                        </div>
-                        <div>
-                            <div class="delivery__icon">
-                                <i class="ri-time-fill"></i>
-                            </div>
-                            <h3 class="delivery__subtitle">1 Hour Service</h3>
-                            <p>Super easy and quick service for patients.</p>
-                        </div>
-
-                        <div>
-                            <div class="delivery__icon">
-                                <i class="ri-syringe-fill"></i>
-                            </div>
-                            <h3 class="delivery__subtitle">Better Quality</h3>
-                            <p>The Best Medicine for Health.</p>
-                        </div>
-                    </div>
-
-                    <div class="delivery__content">
-                        <h3 class="delivery__title">Request <br> Vaccination</h3>
-
-                        <p class="delivery__patients">
-                            <span>324</span> Patients
-                        </p>
-                        <div class="delivery__image">
-                            <img src="assets/delivery-img.png" alt="Vaccine delivery illustration" class="delivery__img" loading="lazy">
-                        </div>
-                        <a href="#contact" class="button-dark">
-                            Request
-                            <i class="ri-arrow-right-s-line"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <a href="doctor.html" class="button-dark">
-                View Doctors
-                <i class="ri-arrow-right-s-line"></i>
-            </a>
-
-        </section>
-
-        <!--==================== ABOUT ====================-->
-        <section class="about section" id="about">
-            <div class="about__container container grid">
-                <div class="about__data">
-                    <div>
-                        <h2 class="section__title">
-                            We Have Certified<br> Medical Service
-                        </h2>
-
-                        <p class="about__description">
-                            Don't worry, we have certified medical service —
-                            you can receive medical consultations in any specialty.
-                        </p>
-                    </div>
-
-                    <div class="about__info">
-                        <div class="about__stat">
-                            <h3 class="about__number">256</h3>
-                            <p class="about__details">Healthy <br> patients</p>
-                        </div>
-
-                        <div class="about__stat">
-                            <h3 class="about__number">16</h3>
-                            <p class="about__details">Hospital <br> care</p>
-                        </div>
-
-                        <div class="about__stat">
-                            <h3 class="about__number">8</h3>
-                            <p class="about__details">Year of <br> Experience</p>
-                        </div>
-                    </div>
-                    <a href="#contact" class="about__button">
-                        Contact Us
-                        <i class="ri-arrow-right-s-line"></i>
+                    <a href="doctor.html" class="button-dark" style="display:inline-flex;align-items:center;gap:6px;">
+                        <i class="ri-team-line"></i> Our Doctors
                     </a>
                 </div>
-                <img src="assets/about-img.png" alt="Certified medical team" class="about__img" loading="lazy">
-            </div>
-        </section>
-
-        <!--==================== PRICES ====================-->
-        <section class="prices section" id="prices">
-            <div class="prices__container container grid">
-                <div class="prices__data">
-                    <h2 class="section__title">
-                        <span >Affordable Prices To<br>Check Your Health</span>
-                    </h2>
-
-                    <p class="prices__description">
-                        Get the prices, make inquiries, check-ups, and
-                        visit your home. Schedule your consultation now.
-                    </p>
-                </div>
-                <div class="prices__content">
-                    <div class="prices__box">
-                        <p class="prices__details">All Medical Service <br> In your hand</p>
-                    </div>
-
-                    <div class="prices__swiper swiper ">
-                        <div class="swiper-wrapper">
-                            <article class="prices__card swiper-slide">
-                                <div class="prices__heading">
-                                    <h2 class="prices__number">$15</h2>
-                                    <h3 class="prices__title">Health Consultation</h3>
-                                </div>
-
-                                <ul class="prices__list">
-                                    <li class="prices__items">
-                                        <i class="ri-checkbox-fill"></i>
-                                        <span>Consultation about your health.</span>
-                                    </li>
-
-                                    <li class="prices__items">
-                                        <i class="ri-checkbox-fill"></i>
-                                        <span>Ask any question about health.</span>
-                                    </li>
-
-                                    <li class="prices__items">
-                                        <i class="ri-checkbox-fill"></i>
-                                        <span>Take your time without limits.</span>
-                                    </li>
-                                </ul>
-                            </article>
-                            <article class="prices__card swiper-slide">
-                                <div class="prices__heading">
-                                    <h2 class="prices__number">$35</h2>
-                                    <h3 class="prices__title">Delivery Service</h3>
-                                </div>
-
-                                <ul class="prices__list">
-                                    <li class="prices__items">
-                                        <i class="ri-checkbox-fill"></i>
-                                        <span>We offer delivery service.</span>
-                                    </li>
-
-                                    <li class="prices__items">
-                                        <i class="ri-checkbox-fill"></i>
-                                        <span>We come to your home for service.</span>
-                                    </li>
-
-                                    <li class="prices__items">
-                                        <i class="ri-checkbox-fill"></i>
-                                        <span>Available 24 hours a day.</span>
-                                    </li>
-                                </ul>
-                            </article>
-                            <article class="prices__card swiper-slide">
-                                <div class="prices__heading">
-                                    <h2 class="prices__number">$125</h2>
-                                    <h3 class="prices__title">Medical Attention</h3>
-                                </div>
-
-                                <ul class="prices__list">
-                                    <li class="prices__items">
-                                        <i class="ri-checkbox-fill"></i>
-                                        <span>Instant check-ups on your health.</span>
-                                    </li>
-
-                                    <li class="prices__items">
-                                        <i class="ri-checkbox-fill"></i>
-                                        <span>Primary attention on the patients.</span>
-                                    </li>
-
-                                    <li class="prices__items">
-                                        <i class="ri-checkbox-fill"></i>
-                                        <span>Monitoring your health for up to a week.</span>
-                                    </li>
-                                </ul>
-                            </article>
-                        </div>
-
-                        <!-- pagination -->
-                        <div class="swiper-pagination"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        <!-- ====================GALLERY====================== -->
-        <section class="gallery section" id="gallery">
-            <h2 class="section__title" style="text-align:center; padding-bottom:1rem;">
-                <span>Our faculty</span>
-            </h2>
-            <div class="gallery__container container grid">
-
-                <div class="gallery__image">
-                    <img src="assets/gallery-img-1.png" alt="Modern medical consultation room" class="gallery__img" loading="lazy">
-                </div>
-
-                <div class="gallery__image">
-                    <img src="assets/gallery-img-2.png" alt="State-of-the-art diagnostic equipment" class="gallery__img" loading="lazy">
-                </div>
-
-                <div class="gallery__image">
-                    <img src="assets/gallery-img-3.png" alt="Comfortable patient waiting area" class="gallery__img" loading="lazy">
-                </div>
-
-                <div class="gallery__image">
-                    <img src="assets/gallery-img-4.png" alt="Certified pharmacy and medicine storage" class="gallery__img" loading="lazy">
-                </div>
-
             </div>
 
-        </section>
-
-
-        <!-- ====================CONTACT====================== -->
-        <section class="contact section" id="contact">
-            <div class="contact__container container grid">
-                <div class="contact__data">
-                    <h2 class="section__title">
-                        <span>Contact Us<br>On All Platforms</span>
-                    </h2>
-
-                    <p class="contact__description">
-                        Contact us on all our social media channels. We are
-                        available for you and your health. Write to us now.
-                    </p>
-
-                    <div class="contact__info">
-                        <div>
-                            <div class="contact__icon">
-                                <i class="ri-message-3-fill"></i>
-                            </div>
-                            <h3 class="contact__subtitle">Write to us</h3>
-
-                            <div class="contact__social">
-                                <a href="https://wa.me/919876543210?text=Hello,%20I%20need%20more%20information!"
-                                    target="_blank" class="contact__social-link" aria-label="WhatsApp">
-                                    <i class="ri-whatsapp-fill"></i>
-                                </a>
-
-                                <a href="https://web.telegram.org/" target="_blank" class="contact__social-link" aria-label="Telegram">
-                                    <i class="ri-telegram-2-fill"></i>
-                                </a>
-
-                                <a href="mailto:info@medicalcare.com" class="contact__social-link" aria-label="Email">
-                                    <i class="ri-mail-fill"></i>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="contact__icon">
-                                <i class="ri-hospital-fill"></i>
-                            </div>
-
-                            <h3 class="contact__subtitle">Location</h3>
-                            <address class="contact__address">
-                                Your City, Your State <br>
-                                123 Medical Avenue
-                            </address>
-                        </div>
-
-                        <div>
-                            <div class="contact__icon">
-                                <i class="ri-time-fill"></i>
-                            </div>
-
-                            <h3 class="contact__subtitle">Attention</h3>
-
-                            <address class="contact__address">
-                                Monday - Friday <br>
-                                8am - 6pm
-                            </address>
-                        </div>
-
-                        <div>
-                            <div class="contact__icon">
-                                <i class="ri-smartphone-fill"></i>
-                            </div>
-
-                            <h3 class="contact__subtitle">Phone number</h3>
-
-                            <address class="contact__address">
-                                <a href="tel:+919876543210">+91-98765-43210</a><br>
-                                <a href="tel:+919876543211">+91-98765-43211</a>
-                            </address>
+            <div class="home__content grid">
+                <div class="home__info">
+                    <div>
+                        <h2 class="home__name">Dr. Myla Harts</h2>
+                        <h3 class="home__profession">Bones Specialist</h3>
+                        <div class="home__icons">
+                            <div class="home__box"><i class="ri-medicine-bottle-fill"></i></div>
+                            <div class="home__box"><i class="ri-24-hours-line"></i></div>
                         </div>
                     </div>
-
-                    <!-- ===== CONTACT FORM ===== -->
-                    <form class="contact__form" id="contactForm" novalidate>
-                        <p class="contact__form-title">Send us a message</p>
-
-                        <div class="contact__form-group">
-                            <input type="text" id="cf-name" class="contact__form-input" placeholder="Your Full Name" autocomplete="name">
-                            <p class="contact__form-error" id="err-name">Please enter your name (min. 2 characters).</p>
-                        </div>
-
-                        <div class="contact__form-group">
-                            <input type="email" id="cf-email" class="contact__form-input" placeholder="Your Email Address" autocomplete="email">
-                            <p class="contact__form-error" id="err-email">Please enter a valid email address.</p>
-                        </div>
-
-                        <div class="contact__form-group">
-                            <input type="text" id="cf-subject" class="contact__form-input" placeholder="Subject">
-                            <p class="contact__form-error" id="err-subject">Please enter a subject (min. 2 characters).</p>
-                        </div>
-
-                        <div class="contact__form-group">
-                            <textarea id="cf-message" class="contact__form-textarea" placeholder="Your message..."></textarea>
-                            <p class="contact__form-error" id="err-message">Message must be at least 10 characters.</p>
-                        </div>
-
-                        <button type="submit" class="contact__form-btn" id="cf-submit">
-                            <i class="ri-send-plane-fill"></i> Send Message
-                        </button>
-
-                        <div class="contact__form-success" id="contactSuccess">
-                            ✅ Your message was sent! We'll get back to you soon.
-                        </div>
-                    </form>
-
+                    <a href="#contact" class="home__button button-dark">
+                        <i class="ri-arrow-right-s-line"></i> Contact
+                    </a>
                 </div>
-
-                <div class="contact__map">
-                    <!-- Replace with your actual clinic location from Google Maps > Share > Embed Map -->
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d109744.9!2d75.8018!3d30.9010!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391a837462345f25%3A0x4b6c5c8cbc!2sLudhiana%2C%20Punjab!5e0!3m2!1sen!2sin!4v1773623198796!5m2!1sen!2sin"
-                        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"
-                        title="Clinic location on Google Maps">
-                    </iframe>
+                <div class="home__image">
+                    <img src="assets/home-img.png" alt="Doctor illustration" class="home__img" loading="lazy">
+                    <!-- Floating Tags -->
+                    <div class="float-tag" style="top:10%;right:-10px;">
+                        <i class="ri-shield-check-fill"></i> Certified Doctors
+                    </div>
+                    <div class="float-tag" style="bottom:20%;left:-20px;">
+                        <i class="ri-star-fill" style="color:#ffc107"></i> 4.9 Rating
+                    </div>
                 </div>
-            </div>
-        </section>
-    </main>
-
-
-    <!--==================== FOOTER ====================-->
-    <footer class="footer">
-        <div class="footer__container container grid">
-            <a href="#" class="footer__logo">
-                <i class="ri-stethoscope-line"></i> MedicalCare
-            </a>
-
-            <div class="footer__links">
-                <a href="#home" class="footer__link">Home</a>
-                <a href="#about" class="footer__link">About Us</a>
-                <a href="#prices" class="footer__link">Prices</a>
-                <a href="doctor.html" class="footer__link">Doctors</a>
-                <a href="dashboard.html" class="footer__link">Dashboard</a>
-            </div>
-
-            <div class="footer__social">
-                <a href="https://www.facebook.com/" target="_blank" class="footer__social-link" aria-label="Facebook">
-                    <i class="ri-facebook-circle-fill"></i>
-                </a>
-
-                <a href="https://www.instagram.com/" target="_blank" class="footer__social-link" aria-label="Instagram">
-                    <i class="ri-instagram-line"></i>
-                </a>
-
-                <a href="https://x.com/" target="_blank" class="footer__social-link" aria-label="Twitter/X">
-                    <i class="ri-twitter-x-fill"></i>
-                </a>
-
-                <a href="https://www.youtube.com/" target="_blank" class="footer__social-link" aria-label="YouTube">
-                    <i class="ri-youtube-fill"></i>
-                </a>
-
-                <a href="https://wa.me/919876543210?text=Hello,%20I%20need%20more%20information!" target="_blank"
-                    class="footer__social-link" aria-label="WhatsApp">
-                    <i class="ri-whatsapp-fill"></i>
-                </a>
             </div>
         </div>
+    </section>
 
-        <span class="footer__copy">
-            &#169; 2026 MedicalCare. All Rights Reserved.
-        </span>
-    </footer>
+    <!-- ======= STATS BANNER ======= -->
+    <section style="background:linear-gradient(135deg,#0a4ba8,#1c8dfc);padding:3rem 0;">
+        <div class="container" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;text-align:center;">
+            <div>
+                <h3 style="font-size:2.5rem;font-weight:800;color:white;" class="stat-counter" data-target="1250">0</h3>
+                <p style="color:rgba(255,255,255,.8);font-size:.9rem;">Patients Treated</p>
+            </div>
+            <div>
+                <h3 style="font-size:2.5rem;font-weight:800;color:white;" class="stat-counter" data-target="6">0</h3>
+                <p style="color:rgba(255,255,255,.8);font-size:.9rem;">Expert Doctors</p>
+            </div>
+            <div>
+                <h3 style="font-size:2.5rem;font-weight:800;color:white;" class="stat-counter" data-target="8">0</h3>
+                <p style="color:rgba(255,255,255,.8);font-size:.9rem;">Years Experience</p>
+            </div>
+            <div>
+                <h3 style="font-size:2.5rem;font-weight:800;color:white;" class="stat-counter" data-target="98">0</h3>
+                <p style="color:rgba(255,255,255,.8);font-size:.9rem;">% Satisfaction</p>
+            </div>
+        </div>
+    </section>
 
-    <!--========== SCROLL UP ==========-->
-    <a href="#" class="scrollup" id="scroll-up" aria-label="Scroll to top">
-        <i class="ri-arrow-up-line"></i>
-    </a>
+    <!-- ======= DELIVERY ======= -->
+    <section class="delivery section" id="delivery">
+        <div class="delivery__container container grid">
+            <div class="delivery__data">
+                <div class="section-badge"><i class="ri-truck-line"></i> Fast Delivery</div>
+                <h2 class="section__title">
+                    <span>Vaccine Injections<br>Delivery Service</span>
+                </h2>
+                <p class="delivery__description">
+                    We provide door-to-door vaccine and injection delivery services,
+                    available to all segments throughout the city.
+                </p>
+                <div class="delivery__info">
+                    <div>
+                        <div class="delivery__icon"><i class="ri-home-4-fill"></i></div>
+                        <h3 class="delivery__subtitle">Home Service</h3>
+                        <p>Fast home vaccination service.</p>
+                    </div>
+                    <div>
+                        <div class="delivery__icon"><i class="ri-time-fill"></i></div>
+                        <h3 class="delivery__subtitle">1 Hour Service</h3>
+                        <p>Super easy and quick service for patients.</p>
+                    </div>
+                    <div>
+                        <div class="delivery__icon"><i class="ri-syringe-fill"></i></div>
+                        <h3 class="delivery__subtitle">Better Quality</h3>
+                        <p>The Best Medicine for Health.</p>
+                    </div>
+                </div>
+                <div class="delivery__content">
+                    <h3 class="delivery__title">Request <br>Vaccination</h3>
+                    <p class="delivery__patients"><span>324</span> Patients</p>
+                    <div class="delivery__image">
+                        <img src="assets/delivery-img.png" alt="Vaccine delivery" class="delivery__img" loading="lazy">
+                    </div>
+                    <a href="#contact" class="button-dark">Request <i class="ri-arrow-right-s-line"></i></a>
+                </div>
+            </div>
+        </div>
+        <a href="doctor.html" class="button-dark" style="display:block;width:fit-content;margin:1rem auto;">
+            View Doctors <i class="ri-arrow-right-s-line"></i>
+        </a>
+    </section>
 
-    <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/919876543210?text=Hello,%20I%20need%20more%20information!"
-       target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
-        <i class="ri-whatsapp-fill"></i>
-    </a>
+    <!-- ======= FEATURES ======= -->
+    <section style="padding:4rem 0;background:#f8faff;" id="features">
+        <div class="container">
+            <div style="text-align:center;margin-bottom:1rem;">
+                <div class="section-badge" style="margin:0 auto 1rem;"><i class="ri-award-line"></i> Why Choose Us</div>
+                <h2 style="font-size:1.8rem;color:#1a2a44;font-weight:800;">Everything You Need<br>In One Place</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="icon"><i class="ri-shield-cross-fill"></i></div>
+                    <h4>Certified Doctors</h4>
+                    <p>All doctors are board-certified with years of expertise.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon"><i class="ri-24-hours-fill"></i></div>
+                    <h4>24/7 Available</h4>
+                    <p>Emergency care available around the clock, every day.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon"><i class="ri-smartphone-fill"></i></div>
+                    <h4>Online Booking</h4>
+                    <p>Book appointments instantly from your phone or laptop.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon"><i class="ri-file-shield-2-fill"></i></div>
+                    <h4>Secure Records</h4>
+                    <p>Your medical data is private and fully encrypted.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!--=============== SCROLLREVEAL ===============-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/scrollReveal.js/4.0.9/scrollreveal.min.js"></script>
+    <!-- ======= ABOUT ======= -->
+    <section class="about section" id="about">
+        <div class="about__container container grid">
+            <div class="about__data">
+                <div>
+                    <div class="section-badge"><i class="ri-hospital-fill"></i> About Us</div>
+                    <h2 class="section__title">We Have Certified<br>Medical Service</h2>
+                    <p class="about__description">
+                        Don't worry — we have certified medical service and you can
+                        receive consultations in any specialty, in-clinic or at home.
+                    </p>
+                </div>
 
-    <!--=============== SWIPER JS ===============-->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+                <!-- Skill Bars -->
+                <div style="margin:1.5rem 0;">
+                    <div class="skill-bar">
+                        <div class="skill-label"><span>Patient Satisfaction</span><span>98%</span></div>
+                        <div class="skill-track"><div class="skill-fill" data-width="98"></div></div>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-label"><span>Treatment Success</span><span>94%</span></div>
+                        <div class="skill-track"><div class="skill-fill" data-width="94"></div></div>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-label"><span>On-Time Delivery</span><span>99%</span></div>
+                        <div class="skill-track"><div class="skill-fill" data-width="99"></div></div>
+                    </div>
+                </div>
 
-    <!--=============== MAIN JS ===============-->
-    <script src="script.js"></script>
+                <div class="about__info">
+                    <div class="about__stat">
+                        <h3 class="about__number stat-counter" data-target="256">0</h3>
+                        <p class="about__details">Healthy <br>Patients</p>
+                    </div>
+                    <div class="about__stat">
+                        <h3 class="about__number stat-counter" data-target="16">0</h3>
+                        <p class="about__details">Hospital <br>Care</p>
+                    </div>
+                    <div class="about__stat">
+                        <h3 class="about__number stat-counter" data-target="8">0</h3>
+                        <p class="about__details">Years of <br>Experience</p>
+                    </div>
+                </div>
+                <a href="#contact" class="about__button">
+                    Contact Us <i class="ri-arrow-right-s-line"></i>
+                </a>
+            </div>
+            <img src="assets/about-img.png" alt="Certified medical team" class="about__img" loading="lazy">
+        </div>
+    </section>
 
-    <!-- Contact Form Script -->
-    <script>
-    document.getElementById("contactForm").addEventListener("submit", function(e) {
-        e.preventDefault();
+    <!-- ======= PRICES ======= -->
+    <section class="prices section" id="prices">
+        <div class="prices__container container grid">
+            <div class="prices__data">
+                <div class="section-badge"><i class="ri-price-tag-3-fill"></i> Pricing</div>
+                <h2 class="section__title">
+                    <span>Affordable Prices To<br>Check Your Health</span>
+                </h2>
+                <p class="prices__description">
+                    Get the prices, make inquiries, check-ups, and visit your home.
+                    Schedule your consultation now.
+                </p>
+            </div>
+            <div class="prices__content">
+                <div class="prices__box">
+                    <p class="prices__details">All Medical Service<br>In your hand</p>
+                </div>
+                <div class="prices__swiper swiper">
+                    <div class="swiper-wrapper">
+                        <article class="prices__card swiper-slide">
+                            <div class="prices__heading">
+                                <h2 class="prices__number">$15</h2>
+                                <h3 class="prices__title">Health Consultation</h3>
+                            </div>
+                            <ul class="prices__list">
+                                <li class="prices__items"><i class="ri-checkbox-fill"></i><span>Consultation about your health.</span></li>
+                                <li class="prices__items"><i class="ri-checkbox-fill"></i><span>Ask any question about health.</span></li>
+                                <li class="prices__items"><i class="ri-checkbox-fill"></i><span>Take your time without limits.</span></li>
+                            </ul>
+                            <a href="login.html" class="button" style="display:block;text-align:center;margin-top:1rem;padding:.7rem;">Book Now</a>
+                        </article>
+                        <article class="prices__card swiper-slide">
+                            <div class="prices__heading">
+                                <h2 class="prices__number">$35</h2>
+                                <h3 class="prices__title">Delivery Service</h3>
+                            </div>
+                            <ul class="prices__list">
+                                <li class="prices__items"><i class="ri-checkbox-fill"></i><span>We offer delivery service.</span></li>
+                                <li class="prices__items"><i class="ri-checkbox-fill"></i><span>We come to your home for service.</span></li>
+                                <li class="prices__items"><i class="ri-checkbox-fill"></i><span>Available 24 hours a day.</span></li>
+                            </ul>
+                            <a href="login.html" class="button" style="display:block;text-align:center;margin-top:1rem;padding:.7rem;">Book Now</a>
+                        </article>
+                        <article class="prices__card swiper-slide">
+                            <div class="prices__heading">
+                                <h2 class="prices__number">$125</h2>
+                                <h3 class="prices__title">Medical Attention</h3>
+                            </div>
+                            <ul class="prices__list">
+                                <li class="prices__items"><i class="ri-checkbox-fill"></i><span>Instant check-ups on your health.</span></li>
+                                <li class="prices__items"><i class="ri-checkbox-fill"></i><span>Primary attention on the patients.</span></li>
+                                <li class="prices__items"><i class="ri-checkbox-fill"></i><span>Monitoring your health for a week.</span></li>
+                            </ul>
+                            <a href="login.html" class="button" style="display:block;text-align:center;margin-top:1rem;padding:.7rem;">Book Now</a>
+                        </article>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        const name    = document.getElementById("cf-name");
-        const email   = document.getElementById("cf-email");
-        const subject = document.getElementById("cf-subject");
-        const message = document.getElementById("cf-message");
-        const btn     = document.getElementById("cf-submit");
-        let valid = true;
+    <!-- ======= TESTIMONIALS ======= -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div style="text-align:center;">
+                <h2 class="section__title" style="color:white !important;">
+                    <span style="color:rgba(255,255,255,.8) !important;background:transparent !important;">What Our Patients Say</span>
+                </h2>
+            </div>
+            <div class="test-grid">
+                <div class="test-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"MedicalCare changed how I approach my health. The doctors are incredibly attentive and the online booking saved so much time!"</p>
+                    <div class="test-author">
+                        <div class="test-avatar">RK</div>
+                        <div><strong>Rahul Kumar</strong><span>Bone Treatment Patient</span></div>
+                    </div>
+                </div>
+                <div class="test-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"The vaccine delivery at my doorstep was a blessing. Fast, professional, and completely hassle-free. Highly recommend!"</p>
+                    <div class="test-author">
+                        <div class="test-avatar">PS</div>
+                        <div><strong>Priya Sharma</strong><span>Delivery Service User</span></div>
+                    </div>
+                </div>
+                <div class="test-card">
+                    <div class="stars">★★★★☆</div>
+                    <p>"Dr. Michael Brown diagnosed my condition when others couldn't. The neurology team here is world-class. Thank you MedicalCare!"</p>
+                    <div class="test-author">
+                        <div class="test-avatar">AM</div>
+                        <div><strong>Arjun Mehta</strong><span>Neurology Patient</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        function setError(field, errId, condition) {
-            const err = document.getElementById(errId);
-            if (condition) {
-                err.style.display = "block";
-                field.style.borderColor = "#c0392b";
-                valid = false;
-            } else {
-                err.style.display = "none";
-                field.style.borderColor = "";
-            }
-        }
+    <!-- ======= GALLERY ======= -->
+    <section class="gallery section" id="gallery">
+        <div style="text-align:center;margin-bottom:1rem;">
+            <div class="section-badge" style="margin:0 auto 1rem;"><i class="ri-image-2-fill"></i> Our Facility</div>
+            <h2 class="section__title"><span>Our Faculty</span></h2>
+        </div>
+        <div class="gallery__container container grid">
+            <div class="gallery__image"><img src="assets/gallery-img-1.png" alt="Consultation room" class="gallery__img" loading="lazy"></div>
+            <div class="gallery__image"><img src="assets/gallery-img-2.png" alt="Diagnostic equipment" class="gallery__img" loading="lazy"></div>
+            <div class="gallery__image"><img src="assets/gallery-img-3.png" alt="Waiting area" class="gallery__img" loading="lazy"></div>
+            <div class="gallery__image"><img src="assets/gallery-img-4.png" alt="Pharmacy" class="gallery__img" loading="lazy"></div>
+        </div>
+    </section>
 
-        // Sanitize helper
-        function sanitize(str) {
-            return str.replace(/[<>\"']/g, "");
-        }
+    <!-- ======= CONTACT ======= -->
+    <section class="contact section" id="contact">
+        <div class="contact__container container grid">
+            <div class="contact__data">
+                <div class="section-badge"><i class="ri-customer-service-2-fill"></i> Get In Touch</div>
+                <h2 class="section__title">
+                    <span>Contact Us<br>On All Platforms</span>
+                </h2>
+                <p class="contact__description">
+                    Contact us on all our social media channels. We are
+                    available for you and your health. Write to us now.
+                </p>
+                <div class="contact__info">
+                    <div>
+                        <div class="contact__icon"><i class="ri-message-3-fill"></i></div>
+                        <h3 class="contact__subtitle">Write to us</h3>
+                        <div class="contact__social">
+                            <a href="https://wa.me/919876543210" target="_blank" class="contact__social-link" aria-label="WhatsApp"><i class="ri-whatsapp-fill"></i></a>
+                            <a href="https://web.telegram.org/" target="_blank" class="contact__social-link" aria-label="Telegram"><i class="ri-telegram-2-fill"></i></a>
+                            <a href="mailto:info@medicalcare.com" class="contact__social-link" aria-label="Email"><i class="ri-mail-fill"></i></a>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="contact__icon"><i class="ri-hospital-fill"></i></div>
+                        <h3 class="contact__subtitle">Location</h3>
+                        <address class="contact__address">Chandigarh, India<br>123 Medical Avenue</address>
+                    </div>
+                    <div>
+                        <div class="contact__icon"><i class="ri-time-fill"></i></div>
+                        <h3 class="contact__subtitle">Attention</h3>
+                        <address class="contact__address">Monday – Friday<br>8am – 6pm</address>
+                    </div>
+                    <div>
+                        <div class="contact__icon"><i class="ri-smartphone-fill"></i></div>
+                        <h3 class="contact__subtitle">Phone</h3>
+                        <address class="contact__address">
+                            <a href="tel:+919876543210">+91-98765-43210</a><br>
+                            <a href="tel:+919876543211">+91-98765-43211</a>
+                        </address>
+                    </div>
+                </div>
 
-        setError(name,    "err-name",    name.value.trim().length < 2);
-        setError(email,   "err-email",   !/^[^@]+@[^@]+\.[^@]+$/.test(email.value));
-        setError(subject, "err-subject", subject.value.trim().length < 2);
-        setError(message, "err-message", message.value.trim().length < 10);
+                <!-- CONTACT FORM -->
+                <form class="contact__form" id="contactForm" novalidate>
+                    <p class="contact__form-title">Send us a message</p>
+                    <div class="contact__form-group">
+                        <input type="text" id="cf-name" class="contact__form-input" placeholder="Your Full Name" autocomplete="name">
+                        <p class="contact__form-error" id="err-name">Please enter your name (min. 2 chars).</p>
+                    </div>
+                    <div class="contact__form-group">
+                        <input type="email" id="cf-email" class="contact__form-input" placeholder="Your Email Address" autocomplete="email">
+                        <p class="contact__form-error" id="err-email">Please enter a valid email address.</p>
+                    </div>
+                    <div class="contact__form-group">
+                        <input type="text" id="cf-subject" class="contact__form-input" placeholder="Subject">
+                        <p class="contact__form-error" id="err-subject">Please enter a subject (min. 2 chars).</p>
+                    </div>
+                    <div class="contact__form-group">
+                        <textarea id="cf-message" class="contact__form-textarea" placeholder="Your message..."></textarea>
+                        <p class="contact__form-error" id="err-message">Message must be at least 10 characters.</p>
+                    </div>
+                    <button type="submit" class="contact__form-btn" id="cf-submit">
+                        <i class="ri-send-plane-fill"></i> Send Message
+                    </button>
+                    <div class="contact__form-success" id="contactSuccess">✅ Your message was sent! We'll get back to you soon.</div>
+                </form>
+            </div>
 
-        if (!valid) return;
+            <div class="contact__map">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d109744.9!2d75.8018!3d30.9010!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391a837462345f25%3A0x4b6c5c8cbc!2sLudhiana%2C%20Punjab!5e0!3m2!1sen!2sin!4v1773623198796!5m2!1sen!2sin"
+                    width="600" height="450" style="border:0;border-radius:16px;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade" title="Clinic location on Google Maps">
+                </iframe>
+            </div>
+        </div>
+    </section>
+</main>
 
-        // Disable button to prevent double-submit, show loading state
-        btn.disabled = true;
-        btn.innerHTML = '<i class="ri-loader-4-line"></i> Sending...';
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer__container container grid">
+        <a href="#" class="footer__logo"><i class="ri-stethoscope-line"></i> MedicalCare</a>
+        <div class="footer__links">
+            <a href="#home" class="footer__link">Home</a>
+            <a href="#about" class="footer__link">About Us</a>
+            <a href="#prices" class="footer__link">Prices</a>
+            <a href="doctor.html" class="footer__link">Doctors</a>
+            <a href="dashboard.html" class="footer__link">Dashboard</a>
+        </div>
+        <div class="footer__social">
+            <a href="https://www.facebook.com/" target="_blank" class="footer__social-link" aria-label="Facebook"><i class="ri-facebook-circle-fill"></i></a>
+            <a href="https://www.instagram.com/" target="_blank" class="footer__social-link" aria-label="Instagram"><i class="ri-instagram-line"></i></a>
+            <a href="https://x.com/" target="_blank" class="footer__social-link" aria-label="Twitter/X"><i class="ri-twitter-x-fill"></i></a>
+            <a href="https://www.youtube.com/" target="_blank" class="footer__social-link" aria-label="YouTube"><i class="ri-youtube-fill"></i></a>
+            <a href="https://wa.me/919876543210" target="_blank" class="footer__social-link" aria-label="WhatsApp"><i class="ri-whatsapp-fill"></i></a>
+        </div>
+    </div>
+    <span class="footer__copy">&#169; 2026 MedicalCare. All Rights Reserved.</span>
+</footer>
 
-        // Save sanitized message to localStorage
-        const messages = JSON.parse(localStorage.getItem("contactMessages") || "[]");
-        messages.push({
-            name:    sanitize(name.value.trim()),
-            email:   sanitize(email.value.trim()),
-            subject: sanitize(subject.value.trim()),
-            message: sanitize(message.value.trim()),
-            date:    new Date().toLocaleString()
-        });
-        localStorage.setItem("contactMessages", JSON.stringify(messages));
+<a href="#" class="scrollup" id="scroll-up" aria-label="Scroll to top"><i class="ri-arrow-up-line"></i></a>
 
-        // Simulate send delay then show success
-        setTimeout(() => {
-            this.reset();
-            document.getElementById("contactSuccess").style.display = "block";
-            btn.disabled = false;
-            btn.innerHTML = '<i class="ri-send-plane-fill"></i> Send Message';
-            setTimeout(() => {
-                document.getElementById("contactSuccess").style.display = "none";
-            }, 5000);
-        }, 800);
+<a href="https://wa.me/919876543210?text=Hello,%20I%20need%20more%20information!"
+   target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
+    <i class="ri-whatsapp-fill"></i>
+</a>
+
+<!-- Toast container -->
+<div id="global-toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/scrollReveal.js/4.0.9/scrollreveal.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+<script src="script.js"></script>
+
+<script>
+// ====== TYPED TEXT EFFECT ======
+const phrases = ["Get Quick", "Reliable", "Certified", "Trusted"];
+let pIdx = 0, cIdx = 0, deleting = false;
+const typedEl = document.getElementById('typed-title');
+
+function typeEffect() {
+    const current = phrases[pIdx];
+    if (!deleting) {
+        typedEl.textContent = current.slice(0, ++cIdx);
+        if (cIdx === current.length) { deleting = true; setTimeout(typeEffect, 1800); return; }
+    } else {
+        typedEl.textContent = current.slice(0, --cIdx);
+        if (cIdx === 0) { deleting = false; pIdx = (pIdx + 1) % phrases.length; }
+    }
+    setTimeout(typeEffect, deleting ? 60 : 100);
+}
+typeEffect();
+
+// ====== ANIMATED STAT COUNTERS ======
+function animateCounters() {
+    document.querySelectorAll('.stat-counter').forEach(el => {
+        const target = parseInt(el.dataset.target);
+        const suffix = el.closest('[data-target="98"]') ? '%' : '+';
+        let current = 0;
+        const step = Math.ceil(target / 60);
+        const timer = setInterval(() => {
+            current = Math.min(current + step, target);
+            el.textContent = current + (target === 98 ? '%' : '+');
+            if (current >= target) clearInterval(timer);
+        }, 25);
     });
-    </script>
+}
 
+// ====== INTERSECTION OBSERVER ======
+const observerOptions = { threshold: 0.3, rootMargin: '0px 0px -50px 0px' };
+
+const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            animateCounters();
+            counterObserver.disconnect();
+        }
+    });
+}, observerOptions);
+const statsSection = document.querySelector('[data-target="1250"]');
+if (statsSection) counterObserver.observe(statsSection.closest('section') || statsSection);
+
+// ====== SKILL BARS ======
+const skillObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.querySelectorAll('.skill-fill').forEach(bar => {
+                bar.style.width = bar.dataset.width + '%';
+            });
+        }
+    });
+}, { threshold: 0.4 });
+document.querySelectorAll('.about__data').forEach(el => skillObserver.observe(el));
+
+// ====== PARTICLES CANVAS ======
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+    canvas.width  = canvas.parentElement.offsetWidth;
+    canvas.height = canvas.parentElement.offsetHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+for (let i = 0; i < 35; i++) {
+    particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 3 + 1,
+        dx: (Math.random() - .5) * .6,
+        dy: (Math.random() - .5) * .6,
+        alpha: Math.random() * .4 + .1
+    });
+}
+
+function drawParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(28,141,252,${p.alpha})`;
+        ctx.fill();
+        p.x += p.dx; p.y += p.dy;
+        if (p.x < 0 || p.x > canvas.width)  p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    });
+    requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ====== CONTACT FORM ======
+document.getElementById("contactForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const name = document.getElementById("cf-name");
+    const email = document.getElementById("cf-email");
+    const subject = document.getElementById("cf-subject");
+    const message = document.getElementById("cf-message");
+    const btn = document.getElementById("cf-submit");
+    let valid = true;
+
+    function setError(field, errId, condition) {
+        const err = document.getElementById(errId);
+        if (condition) {
+            err.style.display = "block";
+            field.style.borderColor = "#c0392b";
+            valid = false;
+        } else {
+            err.style.display = "none";
+            field.style.borderColor = "";
+        }
+    }
+    const sanitize = str => str.replace(/[<>"']/g, "");
+
+    setError(name, "err-name", name.value.trim().length < 2);
+    setError(email, "err-email", !/^[^@]+@[^@]+\.[^@]+$/.test(email.value));
+    setError(subject, "err-subject", subject.value.trim().length < 2);
+    setError(message, "err-message", message.value.trim().length < 10);
+    if (!valid) return;
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ri-loader-4-line"></i> Sending...';
+    const msgs = JSON.parse(localStorage.getItem("contactMessages") || "[]");
+    msgs.push({
+        name: sanitize(name.value.trim()),
+        email: sanitize(email.value.trim()),
+        subject: sanitize(subject.value.trim()),
+        message: sanitize(message.value.trim()),
+        date: new Date().toLocaleString()
+    });
+    localStorage.setItem("contactMessages", JSON.stringify(msgs));
+    setTimeout(() => {
+        this.reset();
+        document.getElementById("contactSuccess").style.display = "block";
+        btn.disabled = false;
+        btn.innerHTML = '<i class="ri-send-plane-fill"></i> Send Message';
+        setTimeout(() => { document.getElementById("contactSuccess").style.display = "none"; }, 5000);
+    }, 800);
+});
+
+// ====== WELCOME TOAST ======
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const t = document.createElement('div');
+        t.style.cssText = `
+            background:white;border-left:4px solid #1c8dfc;padding:14px 20px;
+            border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.15);
+            font-size:.88rem;font-weight:600;color:#1a2a44;
+            display:flex;align-items:center;gap:10px;
+            animation:slideInRight .4s ease;max-width:300px;
+        `;
+        t.innerHTML = '<i class="ri-stethoscope-line" style="color:#0a4ba8;font-size:1.3rem;"></i> Welcome to MedicalCare! 👋';
+        document.getElementById('global-toast').appendChild(t);
+        setTimeout(() => t.remove(), 4000);
+    }, 1200);
+});
+
+const style = document.createElement('style');
+style.textContent = `@keyframes slideInRight{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}`;
+document.head.appendChild(style);
+</script>
 </body>
-
 </html>
