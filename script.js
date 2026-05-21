@@ -130,3 +130,4 @@ sr.reveal('.prices__box')
 sr.reveal('.prices__swiper', { origin: 'bottom', delay: 600 })
 sr.reveal('.gallery__image', { interval: 100 })
 sr.reveal('.footer__container')
+
