@@ -5,19 +5,266 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Meet our expert doctors at MedicalCare. Find specialists in Bones, Heart, Pediatrics, Neurology, Dermatology and General Medicine.">
     <title>Our Doctors — MedicalCare</title>
-    <link rel="shortcut icon" href="assets/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        body {
+            background: #f0f4fb;
+            margin: 0;
+        }
+
+        /* ── HERO HEADER ── */
+        .doctor-header {
+            text-align: center;
+            padding: 5rem 1.5rem 3rem;
+            background: linear-gradient(160deg, #061c5e, #0a4ba8 50%, #1c8dfc);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .doctor-header::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .doctor-header .back-link {
+            position: absolute; top: 1.5rem; left: 1.5rem;
+            display: inline-flex; align-items: center; gap: 6px;
+            color: rgba(255,255,255,.8); text-decoration: none;
+            font-size: .88rem; font-weight: 600;
+            background: rgba(255,255,255,.1);
+            padding: 7px 14px; border-radius: 20px;
+            border: 1px solid rgba(255,255,255,.2);
+            transition: .2s;
+        }
+        .doctor-header .back-link:hover { background: rgba(255,255,255,.2); color: white; }
+
+        .doctor-header .badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+            color: rgba(255,255,255,.95); font-size: .78rem; font-weight: 700;
+            padding: 5px 16px; border-radius: 20px; margin-bottom: 1.2rem;
+            letter-spacing: .8px; text-transform: uppercase;
+        }
+
+        .doctor-header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: .6rem;
+            position: relative;
+        }
+        .doctor-header .sub {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,.8);
+            margin-bottom: 2rem;
+        }
+
+        /* Search bar */
+        .doc-search-wrap {
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(255,255,255,.12);
+            border: 1.5px solid rgba(255,255,255,.25);
+            border-radius: 14px; padding: 12px 20px;
+            max-width: 580px; margin: 0 auto;
+            backdrop-filter: blur(8px);
+        }
+        .doc-search-wrap i { color: rgba(255,255,255,.7); font-size: 1.1rem; }
+        .doc-search-input {
+            flex: 1; border: none; background: transparent;
+            outline: none; color: white; font-size: .95rem;
+            font-family: inherit;
+        }
+        .doc-search-input::placeholder { color: rgba(255,255,255,.55); }
+        .doc-filter-select {
+            border: none; background: rgba(255,255,255,.15);
+            color: white; border-radius: 8px; padding: 7px 12px;
+            font-size: .85rem; outline: none; cursor: pointer;
+            font-family: inherit;
+        }
+        .doc-filter-select option { color: #1a2a44; background: white; }
+
+        #docResultCount {
+            color: rgba(255,255,255,.75); font-size: .88rem;
+            margin-top: .8rem;
+        }
+
+        /* ── DOCTORS GRID ── */
+        .doctor.section { padding: 3rem 0 4rem; }
+
+        .doctor__container {
+            max-width: 1140px; margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 2rem; padding: 0 1.5rem;
+        }
+
+        /* ── ENHANCED CARD ── */
+        .doctor__card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem 1.5rem 1.5rem;
+            text-align: center;
+            transition: all .35s cubic-bezier(.4,0,.2,1);
+            box-shadow: 0 4px 20px rgba(10,75,168,.06);
+            border: 1.5px solid #e8ecf5;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .doctor__card::after {
+            content: '';
+            position: absolute; bottom: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0a4ba8, #1c8dfc);
+            transform: scaleX(0); transform-origin: left;
+            transition: transform .35s ease;
+        }
+        .doctor__card:hover::after { transform: scaleX(1); }
+
+        .doctor__card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(10,75,168,.15);
+            border-color: transparent;
+        }
+
+        /* Specialty color tag */
+        .spec-tag {
+            position: absolute; top: 1rem; right: 1rem;
+            background: #eaf2ff; color: #0a4ba8;
+            font-size: .7rem; font-weight: 700;
+            padding: 4px 10px; border-radius: 20px;
+            text-transform: uppercase; letter-spacing: .5px;
+        }
+
+        .doctor__img {
+            width: 110px; height: 110px;
+            border-radius: 50%; object-fit: cover;
+            border: 4px solid transparent;
+            background: linear-gradient(white,white) padding-box,
+                        linear-gradient(135deg,#0a4ba8,#1c8dfc) border-box;
+            margin-bottom: 1rem;
+            transition: .4s;
+        }
+        .doctor__card:hover .doctor__img { transform: scale(1.08); }
+
+        .doctor__card h3 {
+            font-size: 1.1rem; font-weight: 800;
+            color: #1a2a44; margin-bottom: 2px;
+        }
+        .special {
+            color: #0a4ba8; font-weight: 700;
+            font-size: .9rem; margin-bottom: 12px;
+        }
+        .doctor__card p {
+            font-size: .84rem; color: #666;
+            margin: 3px 0;
+        }
+
+        /* Rating */
+        .doc-rating {
+            display: flex; align-items: center; justify-content: center;
+            gap: 4px; margin: 8px 0;
+        }
+        .doc-rating .stars { color: #ffc107; font-size: .9rem; }
+        .doc-rating .num { font-size: .82rem; font-weight: 700; color: #555; }
+
+        /* Availability */
+        .doc-avail {
+            display: inline-flex; align-items: center; gap: 5px;
+            font-size: .78rem; font-weight: 700;
+            padding: 4px 12px; border-radius: 20px;
+            margin: 8px 0 12px;
+        }
+        .avail-yes { background: #d4edda; color: #155724; }
+        .avail-no  { background: #fde8e8; color: #a02020; }
+
+        .doctor__social {
+            display: flex; justify-content: center; gap: 12px; margin-bottom: 12px;
+        }
+        .doctor__social a {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #eaf2ff; display: flex; align-items: center;
+            justify-content: center; color: #0a4ba8; font-size: 1.1rem;
+            transition: .25s; text-decoration: none;
+        }
+        .doctor__social a:hover { background: #0a4ba8; color: white; transform: scale(1.1); }
+
+        .book-btn {
+            display: block; padding: 11px 20px;
+            background: linear-gradient(135deg, #0a4ba8, #1c8dfc);
+            color: white; font-weight: 700; font-size: .88rem;
+            border-radius: 10px; text-decoration: none;
+            transition: .3s; position: relative; overflow: hidden;
+        }
+        .book-btn::before {
+            content: ''; position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+            transition: .5s;
+        }
+        .book-btn:hover::before { left: 100%; }
+        .book-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,75,168,.3); }
+        .book-btn.disabled-btn {
+            background: #e0e0e0; color: #999; cursor: not-allowed;
+            box-shadow: none; transform: none;
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            margin-top: 3rem;
+            background: #0a4ba8;
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+        .footer__container { max-width: 900px; margin: 0 auto; }
+        .footer__logo {
+            color: white; font-size: 1.3rem; font-weight: 800;
+            text-decoration: none; display: flex; align-items: center;
+            justify-content: center; gap: 8px; margin-bottom: 1rem;
+        }
+        .footer__links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+        .footer__link {
+            color: rgba(255,255,255,.8); text-decoration: none;
+            font-size: .9rem; font-weight: 500; transition: .2s;
+        }
+        .footer__link:hover { color: white; }
+        .footer__copy {
+            display: block; color: rgba(255,255,255,.6);
+            font-size: .8rem; margin-top: 1rem;
+        }
+
+        .whatsapp-float {
+            position: fixed; bottom: 5rem; right: 1rem;
+            width: 52px; height: 52px; background: #25D366;
+            color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; box-shadow: 0 4px 16px rgba(37,211,102,.5);
+            z-index: 9999; transition: .3s; text-decoration: none;
+        }
+        .whatsapp-float:hover { transform: scale(1.12) translateY(-3px); }
+
+        @media (max-width: 600px) {
+            .doctor-header h1 { font-size: 2rem; }
+            .doctor__container { grid-template-columns: 1fr; max-width: 380px; }
+        }
+    </style>
 </head>
 <body>
 
     <!-- HEADER -->
     <header class="doctor-header">
-        <a href="index.html" class="doc-back-link"><i class="ri-arrow-left-line"></i> Back to Home</a>
+        <a href="index.html" class="back-link"><i class="ri-arrow-left-line"></i> Back to Home</a>
+        <div class="badge"><i class="ri-shield-star-fill"></i> Board Certified Experts</div>
         <h1>Meet Our Doctors</h1>
-        <p>Professional &amp; Experienced Medical Experts</p>
+        <p class="sub">Professional &amp; Experienced Medical Specialists</p>
 
-        <!-- SEARCH BAR -->
         <div class="doc-search-wrap">
             <i class="ri-search-line"></i>
             <input type="text" id="docSearch" placeholder="Search by name or specialty..." class="doc-search-input" autocomplete="off">
@@ -31,7 +278,7 @@
                 <option value="general">General</option>
             </select>
         </div>
-        <p id="docResultCount" style="color:rgba(255,255,255,0.8);font-size:0.9rem;margin-top:0.5rem"></p>
+        <p id="docResultCount"></p>
     </header>
 
     <!-- DOCTORS GRID -->
@@ -39,89 +286,114 @@
         <div class="doctor__container" id="doctorGrid">
 
             <div class="doctor__card" data-name="dr myla harts" data-spec="bone">
-                <img src="assets/doctor1.jpg" class="doctor__img" alt="Dr. Myla Harts — Bone Specialist" loading="lazy">
+                <span class="spec-tag">Bones</span>
+                <img src="assets/doctor1.jpg" class="doctor__img" alt="Dr. Myla Harts" loading="lazy">
                 <h3>Dr. Myla Harts</h3>
                 <p class="special">Bone Specialist</p>
+                <div class="doc-rating"><span class="stars">★★★★★</span><span class="num">4.8</span></div>
+                <div class="doc-avail avail-yes"><span>●</span> Available</div>
                 <p><b>Qualification:</b> MBBS, MS Orthopedics</p>
                 <p><b>Experience:</b> 12 Years</p>
                 <div class="doctor__social">
-                    <a href="tel:+919876540001" aria-label="Call Dr. Myla Harts"><i class="ri-phone-fill"></i></a>
-                    <a href="mailto:myla.harts@medicalcare.com" aria-label="Email Dr. Myla Harts"><i class="ri-mail-fill"></i></a>
+                    <a href="tel:+919876540001" aria-label="Call"><i class="ri-phone-fill"></i></a>
+                    <a href="mailto:myla.harts@medicalcare.com" aria-label="Email"><i class="ri-mail-fill"></i></a>
                 </div>
-                <a href="login.html?doctor=Dr.%20Myla%20Harts%20-%20Bones" class="book-btn">Book Appointment</a>
+                <a href="login.html?doctor=Dr.%20Myla%20Harts%20-%20Bones" class="book-btn">
+                    <i class="ri-calendar-check-line"></i> Book Appointment
+                </a>
             </div>
 
             <div class="doctor__card" data-name="dr john smith" data-spec="cardio">
-                <img src="assets/doctor2.jpg" class="doctor__img" alt="Dr. John Smith — Cardiologist" loading="lazy">
+                <span class="spec-tag">Heart</span>
+                <img src="assets/doctor2.jpg" class="doctor__img" alt="Dr. John Smith" loading="lazy">
                 <h3>Dr. John Smith</h3>
                 <p class="special">Cardiologist</p>
+                <div class="doc-rating"><span class="stars">★★★★★</span><span class="num">4.9</span></div>
+                <div class="doc-avail avail-yes"><span>●</span> Available</div>
                 <p><b>Qualification:</b> MBBS, MD Cardiology</p>
                 <p><b>Experience:</b> 18 Years</p>
                 <div class="doctor__social">
-                    <a href="tel:+919876540002" aria-label="Call Dr. John Smith"><i class="ri-phone-fill"></i></a>
-                    <a href="mailto:john.smith@medicalcare.com" aria-label="Email Dr. John Smith"><i class="ri-mail-fill"></i></a>
+                    <a href="tel:+919876540002" aria-label="Call"><i class="ri-phone-fill"></i></a>
+                    <a href="mailto:john.smith@medicalcare.com" aria-label="Email"><i class="ri-mail-fill"></i></a>
                 </div>
-                <a href="login.html?doctor=Dr.%20John%20Smith%20-%20Heart" class="book-btn">Book Appointment</a>
+                <a href="login.html?doctor=Dr.%20John%20Smith%20-%20Heart" class="book-btn">
+                    <i class="ri-calendar-check-line"></i> Book Appointment
+                </a>
             </div>
 
             <div class="doctor__card" data-name="dr sarah lee" data-spec="child">
-                <img src="assets/doctor3.jpg" class="doctor__img" alt="Dr. Sarah Lee — Pediatrician" loading="lazy">
+                <span class="spec-tag">Child</span>
+                <img src="assets/doctor3.jpg" class="doctor__img" alt="Dr. Sarah Lee" loading="lazy">
                 <h3>Dr. Sarah Lee</h3>
                 <p class="special">Pediatrician</p>
+                <div class="doc-rating"><span class="stars">★★★★½</span><span class="num">4.7</span></div>
+                <div class="doc-avail avail-no"><span>●</span> Currently Busy</div>
                 <p><b>Qualification:</b> MBBS, MD Pediatrics</p>
                 <p><b>Experience:</b> 9 Years</p>
                 <div class="doctor__social">
-                    <a href="tel:+919876540003" aria-label="Call Dr. Sarah Lee"><i class="ri-phone-fill"></i></a>
-                    <a href="mailto:sarah.lee@medicalcare.com" aria-label="Email Dr. Sarah Lee"><i class="ri-mail-fill"></i></a>
+                    <a href="tel:+919876540003" aria-label="Call"><i class="ri-phone-fill"></i></a>
+                    <a href="mailto:sarah.lee@medicalcare.com" aria-label="Email"><i class="ri-mail-fill"></i></a>
                 </div>
-                <a href="login.html?doctor=Dr.%20Sarah%20Lee%20-%20Child" class="book-btn">Book Appointment</a>
+                <span class="book-btn disabled-btn">Currently Unavailable</span>
             </div>
 
             <div class="doctor__card" data-name="dr michael brown" data-spec="neuro">
-                <img src="assets/doctor4.jpg" class="doctor__img" alt="Dr. Michael Brown — Neurologist" loading="lazy">
+                <span class="spec-tag">Neuro</span>
+                <img src="assets/doctor4.jpg" class="doctor__img" alt="Dr. Michael Brown" loading="lazy">
                 <h3>Dr. Michael Brown</h3>
                 <p class="special">Neurologist</p>
+                <div class="doc-rating"><span class="stars">★★★★½</span><span class="num">4.6</span></div>
+                <div class="doc-avail avail-yes"><span>●</span> Available</div>
                 <p><b>Qualification:</b> MBBS, DM Neurology</p>
                 <p><b>Experience:</b> 15 Years</p>
                 <div class="doctor__social">
-                    <a href="tel:+919876540004" aria-label="Call Dr. Michael Brown"><i class="ri-phone-fill"></i></a>
-                    <a href="mailto:michael.brown@medicalcare.com" aria-label="Email Dr. Michael Brown"><i class="ri-mail-fill"></i></a>
+                    <a href="tel:+919876540004" aria-label="Call"><i class="ri-phone-fill"></i></a>
+                    <a href="mailto:michael.brown@medicalcare.com" aria-label="Email"><i class="ri-mail-fill"></i></a>
                 </div>
-                <a href="login.html?doctor=Dr.%20Michael%20Brown%20-%20Neuro" class="book-btn">Book Appointment</a>
+                <a href="login.html?doctor=Dr.%20Michael%20Brown%20-%20Neuro" class="book-btn">
+                    <i class="ri-calendar-check-line"></i> Book Appointment
+                </a>
             </div>
 
             <div class="doctor__card" data-name="dr emily davis" data-spec="skin">
-                <img src="assets/doctor5.jpg" class="doctor__img" alt="Dr. Emily Davis — Dermatologist" loading="lazy">
+                <span class="spec-tag">Skin</span>
+                <img src="assets/doctor5.jpg" class="doctor__img" alt="Dr. Emily Davis" loading="lazy">
                 <h3>Dr. Emily Davis</h3>
                 <p class="special">Dermatologist</p>
+                <div class="doc-rating"><span class="stars">★★★★½</span><span class="num">4.5</span></div>
+                <div class="doc-avail avail-yes"><span>●</span> Available</div>
                 <p><b>Qualification:</b> MBBS, MD Dermatology</p>
                 <p><b>Experience:</b> 7 Years</p>
                 <div class="doctor__social">
-                    <a href="tel:+919876540005" aria-label="Call Dr. Emily Davis"><i class="ri-phone-fill"></i></a>
-                    <a href="mailto:emily.davis@medicalcare.com" aria-label="Email Dr. Emily Davis"><i class="ri-mail-fill"></i></a>
+                    <a href="tel:+919876540005" aria-label="Call"><i class="ri-phone-fill"></i></a>
+                    <a href="mailto:emily.davis@medicalcare.com" aria-label="Email"><i class="ri-mail-fill"></i></a>
                 </div>
-                <a href="login.html?doctor=Dr.%20Emily%20Davis%20-%20Skin" class="book-btn">Book Appointment</a>
+                <a href="login.html?doctor=Dr.%20Emily%20Davis%20-%20Skin" class="book-btn">
+                    <i class="ri-calendar-check-line"></i> Book Appointment
+                </a>
             </div>
 
             <div class="doctor__card" data-name="dr david wilson" data-spec="general">
-                <img src="assets/doctor6.jpg" class="doctor__img" alt="Dr. David Wilson — General Physician" loading="lazy">
+                <span class="spec-tag">General</span>
+                <img src="assets/doctor6.jpg" class="doctor__img" alt="Dr. David Wilson" loading="lazy">
                 <h3>Dr. David Wilson</h3>
                 <p class="special">General Physician</p>
+                <div class="doc-rating"><span class="stars">★★★★★</span><span class="num">4.8</span></div>
+                <div class="doc-avail avail-no"><span>●</span> Currently Busy</div>
                 <p><b>Qualification:</b> MBBS, MD General Medicine</p>
                 <p><b>Experience:</b> 20 Years</p>
                 <div class="doctor__social">
-                    <a href="tel:+919876540006" aria-label="Call Dr. David Wilson"><i class="ri-phone-fill"></i></a>
-                    <a href="mailto:david.wilson@medicalcare.com" aria-label="Email Dr. David Wilson"><i class="ri-mail-fill"></i></a>
+                    <a href="tel:+919876540006" aria-label="Call"><i class="ri-phone-fill"></i></a>
+                    <a href="mailto:david.wilson@medicalcare.com" aria-label="Email"><i class="ri-mail-fill"></i></a>
                 </div>
-                <a href="login.html?doctor=Dr.%20David%20Wilson%20-%20General" class="book-btn">Book Appointment</a>
+                <span class="book-btn disabled-btn">Currently Unavailable</span>
             </div>
 
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer" style="margin-top:3rem;">
-        <div class="footer__container container grid">
+    <footer class="footer">
+        <div class="footer__container">
             <a href="index.html" class="footer__logo">
                 <i class="ri-stethoscope-line"></i> MedicalCare
             </a>
@@ -129,49 +401,57 @@
                 <a href="index.html" class="footer__link">Home</a>
                 <a href="index.html#about" class="footer__link">About</a>
                 <a href="index.html#prices" class="footer__link">Prices</a>
+                <a href="login.html" class="footer__link">Book Appointment</a>
             </div>
+            <span class="footer__copy">&#169; 2026 MedicalCare. All Rights Reserved.</span>
         </div>
-        <span class="footer__copy">&#169; 2026 MedicalCare. All Rights Reserved.</span>
     </footer>
 
-    <!-- WhatsApp Floating Button -->
     <a href="https://wa.me/919876543210?text=Hello,%20I%20need%20more%20information!"
        target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
         <i class="ri-whatsapp-fill"></i>
     </a>
 
     <script>
-        // Search + filter
-        const searchInput = document.getElementById('docSearch');
+        const searchInput  = document.getElementById('docSearch');
         const filterSelect = document.getElementById('docFilter');
-        const cards = document.querySelectorAll('.doctor__card');
-        const resultCount = document.getElementById('docResultCount');
+        const cards        = document.querySelectorAll('.doctor__card');
+        const resultCount  = document.getElementById('docResultCount');
 
         function filterDoctors() {
             const query = searchInput.value.toLowerCase().trim();
             const spec  = filterSelect.value;
             let visible = 0;
 
-            cards.forEach(card => {
-                const name   = card.dataset.name;
+            // for...of on NodeList
+            for (const card of cards) {
+                const name     = card.dataset.name;
                 const cardSpec = card.dataset.spec;
-                const matchQuery = !query || name.includes(query) || cardSpec.includes(query);
-                const matchSpec  = !spec  || cardSpec === spec;
+                const matchQ   = !query || name.includes(query) || cardSpec.includes(query);
+                const matchS   = !spec  || cardSpec === spec;
 
-                if (matchQuery && matchSpec) {
-                    card.style.display = '';
-                    visible++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-
+                if (matchQ && matchS) { card.style.display = ''; visible++; }
+                else                  { card.style.display = 'none'; }
+            }
+            // Ternary operator
             resultCount.textContent = visible + ' doctor' + (visible !== 1 ? 's' : '') + ' found';
         }
 
         searchInput.addEventListener('input', filterDoctors);
         filterSelect.addEventListener('change', filterDoctors);
         filterDoctors();
+
+        // Animate cards on load — staggered
+        cards.forEach((card, i) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            setTimeout(() => {
+                card.style.transition = 'all .5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100 + i * 100);
+        });
     </script>
 </body>
 </html>
+
